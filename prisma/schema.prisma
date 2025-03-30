@@ -8,18 +8,19 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  account_name String    @unique
-  name         String?
-  bio          String?
-  avatar_url   String?
-  role         Role      @default(USER)
-  created_at   DateTime  @default(now())
-  password     String
-  salt         String
-  Post         Post[]
-  likes        Like[]
-  comments     Comment[]
+  id                String    @id @default(uuid())
+  account_name      String    @unique
+  name              String?
+  bio               String?
+  avatar_url        String?
+  profile_completed Boolean   @default(false)
+  role              Role      @default(USER)
+  created_at        DateTime  @default(now())
+  password          String
+  salt              String
+  posts             Post[]
+  likes             Like[]
+  comments          Comment[]
 }
 
 enum Role {
