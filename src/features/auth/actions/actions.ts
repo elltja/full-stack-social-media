@@ -1,7 +1,9 @@
 "use server";
 
+import { prisma } from "@/lib/prisma";
 import { signUpSchema } from "../lib/schemas";
 import { SignUpFormInputs, SignUpFormState } from "../lib/types";
+import { generateSalt, hashPassword } from "../lib/password";
 
 export async function signUp({
   username,
@@ -30,6 +32,26 @@ export async function signUp({
       inputs,
     };
   }
+
+  const [existingUsername, existingEmail] = await Promise.all([
+    prisma.user.findUnique({ where: { account_name: username } }),
+    prisma.user.findUnique({ where: { email } }),
+  ]);
+
+  const fieldErrors: Partial<SignUpFormInputs> = {};
+
+  if (existingUsername) fieldErrors.username = "Username is already taken";
+  if (existingEmail)
+    fieldErrors.email = "An account with this email already exists";
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors, inputs };
+  }
+
+  const salt = generateSalt();
+  const hashedPassword = await hashPassword(password, salt);
+
+  // TODO: Create user and session
 
   return { inputs };
 }
