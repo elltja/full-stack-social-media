@@ -4,6 +4,8 @@ import Topbar from "@/components/Topbar";
 import React from "react";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  console.log("here");
+
   return (
     <div className="h-screen max-h-screen overflow-hidden">
       <Topbar />

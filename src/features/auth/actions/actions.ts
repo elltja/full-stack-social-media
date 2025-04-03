@@ -2,8 +2,14 @@
 
 import { prisma } from "@/lib/prisma";
 import { signUpSchema } from "../lib/schemas";
-import { SignUpFormInputs, SignUpFormState } from "../lib/types";
+import {
+  SignInFormInputs,
+  SignUpFormInputs,
+  SignUpFormState,
+} from "../lib/types";
 import { generateSalt, hashPassword } from "../lib/password";
+import { createUserSession } from "../lib/session";
+import { cookies } from "next/headers";
 
 export async function signUp({
   username,
@@ -50,8 +56,20 @@ export async function signUp({
 
   const salt = generateSalt();
   const hashedPassword = await hashPassword(password, salt);
+  const user = await prisma.user.create({
+    data: {
+      account_name: username,
+      email,
+      password: hashedPassword,
+      salt,
+    },
+  });
 
-  // TODO: Create user and session
+  await createUserSession(user, await cookies());
 
   return { inputs };
+}
+
+export async function signIn({ email, password }: SignInFormInputs) {
+  // TODO
 }

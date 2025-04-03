@@ -1,4 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
+
+export type SafeUser = Omit<User, "password" | "salt">;
+export type FullUser = User;
 
 export const prisma = new PrismaClient({
   omit: {

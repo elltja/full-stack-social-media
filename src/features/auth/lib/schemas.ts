@@ -27,3 +27,7 @@ export const signUpSchema = z
     message: "Passwords must match",
     path: ["confirmPassword"],
   });
+
+export const SessionSchema = z.object({
+  id: z.string(),
+});
