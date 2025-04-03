@@ -2,33 +2,31 @@
 
 import React, { useActionState } from "react";
 import Form from "next/form";
-import { signUp } from "../actions/actions";
+import { signIn } from "../actions/actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { parseFormData } from "../lib/formDataParser";
-import { SignUpFormState } from "../lib/types";
+import { SignInFormState } from "../lib/types";
 import { LoaderCircle } from "lucide-react";
 
-const initialState: SignUpFormState = {
+const initialState: SignInFormState = {
   inputs: {
-    username: "",
     email: "",
     password: "",
-    confirmPassword: "",
   },
 };
 
 export default function SignInForm() {
   // const [formState, signUpAction] = useActionState(signUp, initialState);
 
-  const [formState, signUpAction, isPending] = useActionState(
-    parseFormData<SignUpFormState>(signUp),
+  const [formState, signInAction, isPending] = useActionState(
+    parseFormData<SignInFormState>(signIn),
     initialState
   );
 
   return (
-    <Form action={signUpAction} className="flex flex-col gap-5">
+    <Form action={signInAction} className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
         <Label htmlFor="signup-email-input">Email</Label>
         <Input

@@ -4,12 +4,14 @@ import { prisma } from "@/lib/prisma";
 import { signUpSchema } from "../lib/schemas";
 import {
   SignInFormInputs,
+  SignInFormState,
   SignUpFormInputs,
   SignUpFormState,
 } from "../lib/types";
-import { generateSalt, hashPassword } from "../lib/password";
+import { comparePasswords, generateSalt, hashPassword } from "../lib/password";
 import { createUserSession } from "../lib/session";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function signUp({
   username,
@@ -70,6 +72,38 @@ export async function signUp({
   return { inputs };
 }
 
-export async function signIn({ email, password }: SignInFormInputs) {
-  // TODO
+export async function signIn({
+  email,
+  password,
+}: SignInFormInputs): Promise<SignInFormState> {
+  const inputs = {
+    email,
+    password,
+  };
+
+  const user = await prisma.user.findUnique({
+    where: { email },
+    omit: {
+      password: false,
+      salt: false,
+    },
+  });
+
+  if (!user) {
+    return { fieldErrors: { email: "User does not exist" }, inputs };
+  }
+
+  const isCorrectPassword = comparePasswords({
+    hashedPassword: user?.password,
+    salt: user?.salt,
+    password,
+  });
+
+  if (!isCorrectPassword) {
+    return { fieldErrors: { password: "Incorrect password" }, inputs };
+  }
+
+  await createUserSession(user, await cookies());
+
+  redirect("/");
 }
