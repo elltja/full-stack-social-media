@@ -12,6 +12,7 @@ import { comparePasswords, generateSalt, hashPassword } from "../lib/password";
 import { createUserSession } from "../lib/session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import "server-only";
 
 export async function signUp({
   username,

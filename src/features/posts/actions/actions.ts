@@ -1,4 +1,5 @@
 "use server";
+import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import { PostFormState } from "../lib/types";
@@ -31,5 +32,5 @@ export async function createPost(
     },
   });
 
-  return { text };
+  return { text: "" };
 }

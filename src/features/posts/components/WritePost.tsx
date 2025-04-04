@@ -12,15 +12,16 @@ const initialFormState: PostFormState = {
 };
 
 export default function WritePost() {
-  const [] = useActionState(createPost, initialFormState);
+  const [formState, formAction] = useActionState(createPost, initialFormState);
   return (
     <Form
-      action={async () => {
-        console.log("posted");
-      }}
+      action={formAction}
       className="w-full h-fit bg-white rounded-md shadow flex flex-col p-5 gap-5"
     >
-      <WritePostHeader />
+      <WritePostHeader
+        textContent={formState.text}
+        error={formState.error || null}
+      />
       <WritePostFooter />
     </Form>
   );
