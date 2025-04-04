@@ -1,5 +1,5 @@
 import React from "react";
-import ProfilePicture from "./ProfilePicture";
+import ProfilePicture from "@/components/ProfilePicture";
 
 export default function WritePostHeader() {
   return (

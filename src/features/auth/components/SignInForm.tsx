@@ -6,7 +6,7 @@ import { signIn } from "../actions/actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { parseFormData } from "../lib/formDataParser";
+import { parseFormData } from "@/lib/utils";
 import { SignInFormState } from "../lib/types";
 import { LoaderCircle } from "lucide-react";
 

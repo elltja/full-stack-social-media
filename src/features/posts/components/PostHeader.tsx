@@ -1,7 +1,7 @@
 import { Ellipsis } from "lucide-react";
 import React from "react";
-import ProfilePicture from "./ProfilePicture";
-import { Username } from "./Username";
+import ProfilePicture from "@/components/ProfilePicture";
+import { Username } from "@/components/Username";
 
 export default function PostHeader() {
   return (

@@ -1,7 +1,7 @@
 import { MapPin, Upload } from "lucide-react";
 import React from "react";
-import { Button } from "./ui/button";
-import ImageUploader from "./ImageUploader";
+import { Button } from "@/components/ui/button";
+import ImageUploader from "@/components/ImageUploader";
 
 export default function WritePostFooter() {
   return (

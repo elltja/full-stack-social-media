@@ -1,8 +1,8 @@
 import React from "react";
-import Post from "./Post";
-import WritePost from "./WritePost";
+import Post from "@/features/posts/components/Post";
+import WritePost from "@/features/posts/components/WritePost";
 import { ScrollArea } from "./ui/scroll-area";
-import PostSkeleton from "./PostSkeleton";
+import PostSkeleton from "../features/posts/components/PostSkeleton";
 
 export default function Feed() {
   const isLoading = false;

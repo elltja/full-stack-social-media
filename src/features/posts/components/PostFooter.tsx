@@ -1,8 +1,8 @@
 import React from "react";
-import LikeButton from "./LikeButton";
-import CommentIcon from "./CommentIcon";
-import ShareIcon from "./ShareIcon";
-import SaveIcon from "./SaveIcon";
+import LikeButton from "@/components/LikeButton";
+import CommentIcon from "@/components/CommentIcon";
+import ShareIcon from "@/components/ShareIcon";
+import SaveIcon from "@/components/SaveIcon";
 
 export default function PostFooter() {
   return (
