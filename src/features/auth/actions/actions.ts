@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { signUpSchema } from "../lib/schemas";
 import {
+  ProfileFormState,
   SignInFormInputs,
   SignInFormState,
   SignUpFormInputs,
@@ -13,6 +14,7 @@ import { createUserSession } from "../lib/session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import "server-only";
+import { getCurrentUser } from "../lib/user";
 
 export async function signUp({
   username,
@@ -107,4 +109,41 @@ export async function signIn({
   await createUserSession(user, await cookies());
 
   redirect("/");
+}
+
+export async function createProfile(
+  state: ProfileFormState,
+  formData: unknown
+): Promise<ProfileFormState> {
+  if (!(formData instanceof FormData)) {
+    return { error: "Invalid request", inputs: { bio: "", name: "" } };
+  }
+
+  const name = formData.get("name") as string;
+  const bio = formData.get("bio") as string;
+  const inputs = {
+    name,
+    bio,
+  };
+  const fieldErrors: ProfileFormState["fieldErrors"] = {};
+
+  if (!name) fieldErrors.name = "Name is required";
+  if (!bio) fieldErrors.bio = "Bio is required";
+
+  if (Object.keys(fieldErrors).length > 0) return { fieldErrors, inputs };
+
+  const user = await getCurrentUser();
+
+  await prisma.user.update({
+    where: { id: user?.id },
+    data: {
+      name,
+      bio,
+      profile_completed: true,
+    },
+  });
+
+  // TODO: File upload
+
+  return { inputs: { bio: "", name: "" } };
 }

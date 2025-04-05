@@ -1,6 +1,7 @@
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
-import { isAuthenticated } from "@/features/auth/lib/user";
+import { getCurrentUser } from "@/features/auth/lib/user";
+import AuthProvider from "@/providers/AuthProvider";
 import { redirect } from "next/navigation";
 
 import React from "react";
@@ -10,8 +11,13 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  if (!(await isAuthenticated())) {
+  const user = await getCurrentUser();
+  if (!user) {
     redirect("/accounts/signin");
+  }
+
+  if (!user.profile_completed) {
+    redirect("/accounts/profile");
   }
 
   return (
@@ -19,7 +25,7 @@ export default async function AppLayout({
       <Topbar />
       <div className="flex h-full">
         <Sidebar />
-        {children}
+        <AuthProvider user={user}>{children}</AuthProvider>
       </div>
     </div>
   );

@@ -1,13 +1,12 @@
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import ProfileForm from "@/features/auth/components/ProfileForm";
 import React from "react";
 
-export default function Profile() {
+export default async function Profile() {
   return (
-    <div>
-      <Card className="w-[80vw] h-fit">
-        <Input />
-        <Input />
+    <div className="w-full h-full flex flex-col items-center justify-center">
+      <Card className="w-[80vw] h-fit p-7">
+        <ProfileForm />
       </Card>
     </div>
   );

@@ -3,7 +3,7 @@ import Post from "@/features/posts/components/Post";
 import WritePost from "@/features/posts/components/WritePost";
 import { ScrollArea } from "./ui/scroll-area";
 import PostSkeleton from "../features/posts/components/PostSkeleton";
-import { prisma } from "@/lib/prisma";
+import { PostWithUser, prisma } from "@/lib/prisma";
 
 export default async function Feed() {
   return (
@@ -11,27 +11,33 @@ export default async function Feed() {
       <div className="flex flex-col gap-4 p-4 pb-15">
         <WritePost />
 
-        <Suspense
-          fallback={
-            <>
-              <PostSkeleton />
-              <PostSkeleton />
-              <PostSkeleton />
-              <PostSkeleton />
-              <PostSkeleton />
-              <PostSkeleton />
-            </>
-          }
-        >
-          <SuspendedPosts />
-        </Suspense>
+        <div className="flex flex-col-reverse gap-4">
+          <Suspense
+            fallback={
+              <>
+                <PostSkeleton />
+                <PostSkeleton />
+                <PostSkeleton />
+                <PostSkeleton />
+                <PostSkeleton />
+                <PostSkeleton />
+              </>
+            }
+          >
+            <SuspendedPosts />
+          </Suspense>
+        </div>
       </div>
     </ScrollArea>
   );
 }
 
 async function SuspendedPosts() {
-  const posts = await prisma.post.findMany();
+  const posts = (await prisma.post.findMany({
+    include: {
+      author: true,
+    },
+  })) as PostWithUser[];
   return (
     <>
       {posts.map((post) => {
