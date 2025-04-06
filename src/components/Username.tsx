@@ -17,7 +17,7 @@ export function Username({ user }: { user: SafeUser }) {
         </h3>
       </HoverCardTrigger>
       <HoverCardContent className="w-80 border-gray-300">
-        <div className="flex justify-between space-x-4">
+        <div className="flex justify-between space-x-4 w-fit">
           <ProfilePicture
             src={user.avatar_url || ""}
             name={user.name || ""}

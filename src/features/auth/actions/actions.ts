@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { signUpSchema } from "../lib/schemas";
-import {
+import type {
   ProfileFormState,
   SignInFormInputs,
   SignInFormState,
@@ -15,6 +15,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import "server-only";
 import { getCurrentUser } from "../lib/user";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { COOKIE_SESSION_KEY } from "../lib/constants";
+import { redis } from "@/lib/redis";
 
 export async function signUp({
   username,
@@ -44,35 +47,41 @@ export async function signUp({
     };
   }
 
-  const [existingUsername, existingEmail] = await Promise.all([
-    prisma.user.findUnique({ where: { account_name: username } }),
-    prisma.user.findUnique({ where: { email } }),
-  ]);
+  try {
+    const [existingUsername, existingEmail] = await Promise.all([
+      prisma.user.findUnique({ where: { account_name: username } }),
+      prisma.user.findUnique({ where: { email } }),
+    ]);
 
-  const fieldErrors: Partial<SignUpFormInputs> = {};
+    const fieldErrors: Partial<SignUpFormInputs> = {};
 
-  if (existingUsername) fieldErrors.username = "Username is already taken";
-  if (existingEmail)
-    fieldErrors.email = "An account with this email already exists";
+    if (existingUsername) fieldErrors.username = "Username is already taken";
+    if (existingEmail)
+      fieldErrors.email = "An account with this email already exists";
 
-  if (Object.keys(fieldErrors).length > 0) {
-    return { fieldErrors, inputs };
+    if (Object.keys(fieldErrors).length > 0) {
+      return { fieldErrors, inputs };
+    }
+
+    const salt = generateSalt();
+    const hashedPassword = await hashPassword(password, salt);
+    const user = await prisma.user.create({
+      data: {
+        account_name: username,
+        email,
+        password: hashedPassword,
+        salt,
+      },
+    });
+
+    await createUserSession(user, await cookies());
+
+    redirect("/");
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    console.error(error);
+    return { inputs, error: "Internal server error" };
   }
-
-  const salt = generateSalt();
-  const hashedPassword = await hashPassword(password, salt);
-  const user = await prisma.user.create({
-    data: {
-      account_name: username,
-      email,
-      password: hashedPassword,
-      salt,
-    },
-  });
-
-  await createUserSession(user, await cookies());
-
-  return { inputs };
 }
 
 export async function signIn({
@@ -84,31 +93,38 @@ export async function signIn({
     password,
   };
 
-  const user = await prisma.user.findUnique({
-    where: { email },
-    omit: {
-      password: false,
-      salt: false,
-    },
-  });
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+      omit: {
+        password: false,
+        salt: false,
+      },
+    });
 
-  if (!user) {
-    return { fieldErrors: { email: "User does not exist" }, inputs };
+    if (!user) {
+      return { fieldErrors: { email: "User does not exist" }, inputs };
+    }
+
+    const isCorrectPassword = comparePasswords({
+      hashedPassword: user?.password,
+      salt: user?.salt,
+      password,
+    });
+
+    if (!isCorrectPassword) {
+      return { fieldErrors: { password: "Incorrect password" }, inputs };
+    }
+
+    await createUserSession(user, await cookies());
+
+    redirect("/");
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+
+    console.error(error);
+    return { inputs, error: "Internal server error" };
   }
-
-  const isCorrectPassword = comparePasswords({
-    hashedPassword: user?.password,
-    salt: user?.salt,
-    password,
-  });
-
-  if (!isCorrectPassword) {
-    return { fieldErrors: { password: "Incorrect password" }, inputs };
-  }
-
-  await createUserSession(user, await cookies());
-
-  redirect("/");
 }
 
 export async function createProfile(
@@ -132,18 +148,33 @@ export async function createProfile(
 
   if (Object.keys(fieldErrors).length > 0) return { fieldErrors, inputs };
 
-  const user = await getCurrentUser();
+  try {
+    const user = await getCurrentUser();
 
-  await prisma.user.update({
-    where: { id: user?.id },
-    data: {
-      name,
-      bio,
-      profile_completed: true,
-    },
-  });
+    await prisma.user.update({
+      where: { id: user?.id },
+      data: {
+        name,
+        bio,
+        profile_completed: true,
+      },
+    });
 
-  // TODO: File upload
+    // TODO: File upload
 
-  return { inputs: { bio: "", name: "" } };
+    redirect("/");
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    console.error(error);
+    return { inputs, error: "Internal server error" };
+  }
+}
+
+export async function signOut() {
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get(COOKIE_SESSION_KEY)?.value;
+  if (sessionId == null) return null;
+  await redis.del(`session:${sessionId}`);
+  cookieStore.delete(COOKIE_SESSION_KEY);
+  redirect("/accounts/signin");
 }

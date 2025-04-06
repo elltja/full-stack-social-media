@@ -3,15 +3,15 @@ import Post from "@/features/posts/components/Post";
 import WritePost from "@/features/posts/components/WritePost";
 import { ScrollArea } from "./ui/scroll-area";
 import PostSkeleton from "../features/posts/components/PostSkeleton";
-import { PostWithUser, prisma } from "@/lib/prisma";
+import { FullPost, prisma } from "@/lib/prisma";
 
 export default async function Feed() {
   return (
     <ScrollArea className="h-full w-full bg-gray-100 box-border no-scrollbar">
-      <div className="flex flex-col gap-4 p-4 pb-15">
+      <div className="flex flex-col gap-4 p-4 pb-15 box-border max-w-screen">
         <WritePost />
 
-        <div className="flex flex-col-reverse gap-4">
+        <div className="flex flex-col-reverse gap-4 max-w-full">
           <Suspense
             fallback={
               <>
@@ -36,8 +36,11 @@ async function SuspendedPosts() {
   const posts = (await prisma.post.findMany({
     include: {
       author: true,
+      likes: true,
+      comments: true,
+      saves: true,
     },
-  })) as PostWithUser[];
+  })) as unknown as FullPost[];
   return (
     <>
       {posts.map((post) => {

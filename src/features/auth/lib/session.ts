@@ -2,9 +2,7 @@ import { redis } from "@/lib/redis";
 import { Cookies } from "./types";
 import { SafeUser } from "@/lib/prisma";
 import crypto from "crypto";
-
-const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7;
-const COOKIE_SESSION_KEY = "session-id";
+import { COOKIE_SESSION_KEY, SESSION_EXPIRATION_SECONDS } from "./constants";
 
 export async function createUserSession(
   user: SafeUser,

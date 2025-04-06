@@ -1,7 +1,6 @@
 import { redis } from "@/lib/redis";
 import { Cookies, SessionSchema } from "./types";
-
-const COOKIE_SESSION_KEY = "session-id";
+import { COOKIE_SESSION_KEY } from "./constants";
 
 export async function getUserSession(cookies: Pick<Cookies, "get">) {
   try {

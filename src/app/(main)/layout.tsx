@@ -22,11 +22,13 @@ export default async function AppLayout({
 
   return (
     <div className="h-screen max-h-screen overflow-hidden">
-      <Topbar />
-      <div className="flex h-full">
-        <Sidebar />
-        <AuthProvider user={user}>{children}</AuthProvider>
-      </div>
+      <AuthProvider user={user}>
+        <Topbar />
+        <div className="flex h-full">
+          <Sidebar />
+          {children}
+        </div>
+      </AuthProvider>
     </div>
   );
 }

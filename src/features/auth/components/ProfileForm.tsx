@@ -9,15 +9,18 @@ import { Button } from "@/components/ui/button";
 import { ProfileFormState } from "../lib/types";
 import { createProfile } from "../actions/actions";
 import Form from "next/form";
-
-const initialState: ProfileFormState = {
-  inputs: {
-    name: "",
-    bio: "",
-  },
-};
+import { useAuth } from "@/providers/AuthProvider";
+import { SafeUser } from "@/lib/prisma";
 
 export default function ProfileForm() {
+  const user = useAuth() as SafeUser;
+
+  const initialState: ProfileFormState = {
+    inputs: {
+      name: user.name || "",
+      bio: user.bio || "",
+    },
+  };
   const [formState, formAction] = useActionState(createProfile, initialState);
   return (
     <>
@@ -30,6 +33,7 @@ export default function ProfileForm() {
             aria-invalid={!!formState.fieldErrors?.name}
             placeholder="John Doe"
             name="name"
+            defaultValue={formState.inputs.name}
           />
           {formState.fieldErrors?.name && (
             <p className="text-destructive">{formState.fieldErrors.name}</p>
@@ -41,6 +45,7 @@ export default function ProfileForm() {
             aria-invalid={!!formState.fieldErrors?.bio}
             className="resize-none field-sizing-content max-h-96"
             placeholder="Describe your profile"
+            defaultValue={formState.inputs.bio}
             name="bio"
           />
           {formState.fieldErrors?.bio && (

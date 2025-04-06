@@ -1,9 +1,15 @@
-import { Post, PrismaClient, User } from "@prisma/client";
+import { Comment, Like, Post, PrismaClient, Save, User } from "@prisma/client";
 
 export type SafeUser = Omit<User, "password" | "salt">;
-export type FullUser = User;
 export type PostWithUser = Post & {
   author: User;
+};
+
+export type FullPost = Post & {
+  author: User;
+  likes: Like[];
+  comments: Comment[];
+  saves: Save[];
 };
 
 export const prisma = new PrismaClient({

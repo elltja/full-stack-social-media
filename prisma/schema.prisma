@@ -22,6 +22,7 @@ model User {
   posts             Post[]
   likes             Like[]
   comments          Comment[]
+  saves             Save[]
 }
 
 enum Role {
@@ -38,9 +39,21 @@ model Post {
   content    String
   likes      Like[]
   comments   Comment[]
+  saves      Save[]
 }
 
 model Like {
+  id         String   @id @default(uuid())
+  user_id    String
+  post_id    String
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id])
+  post       Post     @relation(fields: [post_id], references: [id])
+
+  @@unique([user_id, post_id])
+}
+
+model Save {
   id         String   @id @default(uuid())
   user_id    String
   post_id    String
