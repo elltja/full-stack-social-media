@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import { Menu } from "lucide-react";
-import ProfileDropdown from "./ProfileDropdown";
+import Navigation from "./Navigation";
 
 export default function MobileMenu() {
   return (
@@ -20,7 +20,7 @@ export default function MobileMenu() {
         <SheetHeader>
           <SheetTitle></SheetTitle>
           <SheetDescription></SheetDescription>
-          <ProfileDropdown />
+          <Navigation />
         </SheetHeader>
       </SheetContent>
     </Sheet>
