@@ -1,30 +1,33 @@
-import { Ellipsis } from "lucide-react";
 import React from "react";
 import ProfilePicture from "@/components/ProfilePicture";
 import { Username } from "@/components/Username";
 import { SafeUser } from "@/lib/prisma";
+import PostMenu from "./PostMenu";
+import { Post } from "@prisma/client";
 
 export default function PostHeader({
-  user,
-  createdAt,
+  author,
+  data,
 }: {
-  user: SafeUser;
-  createdAt: Date;
+  author: SafeUser;
+  data: Post;
 }) {
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-3">
         <ProfilePicture
-          src={user.avatar_url || ""}
-          name={user.name || user.account_name}
-          username={user.account_name}
+          src={author.avatar_url || ""}
+          name={author.name || author.account_name}
+          username={author.account_name}
         />
         <div className="flex flex-col">
-          <Username user={user} />
-          <p className="text-gray-400">{createdAt.toLocaleDateString()}</p>
+          <Username user={author} />
+          <p className="text-gray-400">
+            {data.created_at.toLocaleDateString()}
+          </p>
         </div>
       </div>
-      <Ellipsis className="text-gray-400" />
+      <PostMenu authorId={author.id} postId={data.id} />
     </div>
   );
 }

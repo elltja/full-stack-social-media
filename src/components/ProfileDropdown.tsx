@@ -10,7 +10,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import ProfilePicture from "./ProfilePicture";
-import { Edit, LogOutIcon } from "lucide-react";
+import { Edit, LogOutIcon, User } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import { SafeUser } from "@/lib/prisma";
 import Link from "next/link";
@@ -38,6 +38,12 @@ export default function ProfileDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
+          <Link href={`/@${user.account_name}`} legacyBehavior passHref>
+            <DropdownMenuItem className="cursor-pointer">
+              <User />
+              <span>Profile</span>
+            </DropdownMenuItem>
+          </Link>
           <Link href="/accounts/profile" legacyBehavior passHref>
             <DropdownMenuItem className="cursor-pointer">
               <Edit />

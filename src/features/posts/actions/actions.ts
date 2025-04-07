@@ -1,7 +1,7 @@
 "use server";
 
 import "server-only";
-import { prisma } from "@/lib/prisma";
+import { prisma, SafeUser } from "@/lib/prisma";
 import { PostFormState } from "../lib/types";
 import { getCurrentUser } from "@/features/auth/lib/user";
 import { redirect } from "next/navigation";
@@ -76,4 +76,28 @@ export async function unSavePost(postId: string, userId: string) {
       },
     },
   });
+}
+
+export async function deletePost(postId: string) {
+  const post = await prisma.post.findUnique({
+    where: {
+      id: postId,
+    },
+  });
+  if (!post) {
+    console.error("Someone tried deleting a post which doesn't exist");
+    return;
+  }
+  const currentUser = (await getCurrentUser()) as SafeUser;
+  console.log(post);
+  console.log(currentUser);
+
+  if (currentUser.id !== post?.author_id) {
+    console.error("A user tried deleting a post which isn't theirs");
+    return;
+  }
+  await prisma.post.delete({
+    where: { id: postId },
+  });
+  revalidatePath("/");
 }

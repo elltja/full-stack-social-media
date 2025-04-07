@@ -24,4 +24,5 @@ export const prisma = new PrismaClient({
 prisma
   .$connect()
   .then(() => console.log("Successfully connected to the database"))
-  .catch(console.error);
+  .catch(console.error)
+  .finally(prisma.$disconnect);

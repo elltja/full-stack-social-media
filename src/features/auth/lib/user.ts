@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 async function _getCurrentUser() {
   const userSession = await getUserSession(await cookies());
   if (!userSession) return null;
-  const fullUser = (await prisma.user.findFirst({
+  const fullUser = (await prisma.user.findUnique({
     where: { id: userSession.id },
   })) as SafeUser;
 
