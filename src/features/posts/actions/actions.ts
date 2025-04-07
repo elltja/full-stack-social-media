@@ -2,7 +2,7 @@
 
 import "server-only";
 import { prisma, SafeUser } from "@/lib/prisma";
-import { PostFormState } from "../lib/types";
+import { CommentFormState, PostFormState } from "../lib/types";
 import { getCurrentUser } from "@/features/auth/lib/user";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -100,4 +100,24 @@ export async function deletePost(postId: string) {
     where: { id: postId },
   });
   revalidatePath("/");
+  redirect("/");
+}
+
+export async function createComment(
+  content: string,
+  postId: string
+): Promise<CommentFormState> {
+  if (content === "") return { text: content };
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) return { error: "Unauthorized", text: content };
+  await prisma.comment.create({
+    data: {
+      content,
+      user_id: currentUser?.id,
+      post_id: postId,
+    },
+  });
+  revalidatePath(`/post/${postId}`);
+  return { text: content };
 }

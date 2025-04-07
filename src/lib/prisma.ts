@@ -12,6 +12,15 @@ export type FullPost = Post & {
   saves: Save[];
 };
 
+export type FullPostWithFullComments = Post & {
+  author: User;
+  likes: Like[];
+  comments: (Comment & {
+    user: SafeUser;
+  })[];
+  saves: Save[];
+};
+
 export const prisma = new PrismaClient({
   omit: {
     user: {
