@@ -8,7 +8,6 @@ export type PostWithUser = Post & {
 export type FullPost = Post & {
   author: User;
   likes: Like[];
-  comments: Comment[];
   saves: Save[];
 };
 

@@ -1,6 +1,10 @@
-import { prisma } from "@/lib/prisma";
+import ProfilePicture from "@/components/ProfilePicture";
+import { Separator } from "@/components/ui/separator";
+import { FullPost, prisma, SafeUser } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import Post from "@/features/posts/components/Post";
 import React from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 type ProfileParams = {
   username: string;
 };
@@ -21,15 +25,56 @@ export default async function Profile({
 
   if (!username) notFound();
 
-  const user = await prisma.user.findUnique({
+  const user = (await prisma.user.findUnique({
     where: { account_name: username },
-  });
+    include: {
+      posts: {
+        include: {
+          author: true,
+          likes: true,
+          saves: true,
+        },
+      },
+    },
+  })) as SafeUser & {
+    posts: FullPost[];
+  };
 
   if (!user) notFound();
 
   return (
-    <div>
-      {username} {user.email}
+    <div className="w-full h-fit m-10 bg-background rounded-md shadow flex flex-col p-5 gap-10 md:gap-4">
+      <div className="flex gap-5 items-center h-fit">
+        <ProfilePicture
+          src={user.avatar_url || ""}
+          name={user.name || ""}
+          username={user.account_name}
+          style={{ width: 100, height: 100, fontSize: 50 }}
+        />
+        <div className="flex flex-col">
+          <h1 className="font-bold text-xl">{user.name}</h1>
+          <p className="text-gray-700">{user.email}</p>
+        </div>
+      </div>
+      <div>
+        <h3 className="font-semibold">Bio</h3>
+        <p>{user.bio}</p>
+      </div>
+      <div>
+        <h3 className="font-semibold">Joined</h3>
+        <p>{user.created_at.toLocaleDateString()}</p>
+      </div>
+      <Separator />
+      <div className="">
+        <h2 className="font-bold text-xl my-2">Posts</h2>
+        <ScrollArea className="h-[550px]">
+          <div className="flex flex-col-reverse gap-3 px-2">
+            {user.posts.map((post) => (
+              <Post key={post.id} data={post} />
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
     </div>
   );
 }

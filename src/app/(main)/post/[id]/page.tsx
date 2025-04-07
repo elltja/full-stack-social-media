@@ -33,7 +33,7 @@ export default async function PostPage({
       <Post data={post} />
       <div className="my-5 w-full h-fit flex flex-col gap-4">
         <WriteComment postId={postId} />
-        <div className="w-full px-5">
+        <div className="w-full px-5 flex flex-col gap-3">
           {post.comments.map((comment) => {
             return (
               <Comment key={comment.id} data={comment} author={comment.user} />

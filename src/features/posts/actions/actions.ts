@@ -119,5 +119,5 @@ export async function createComment(
     },
   });
   revalidatePath(`/post/${postId}`);
-  return { text: content };
+  return { text: "" };
 }
