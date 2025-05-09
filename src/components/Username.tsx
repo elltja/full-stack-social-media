@@ -6,9 +6,9 @@ import {
 } from "@/components/ui/hover-card";
 import Link from "next/link";
 import ProfilePicture from "./ProfilePicture";
-import { SafeUser } from "@/lib/prisma";
+import { PublicUser } from "@/lib/server/prisma";
 
-export function Username({ user }: { user: SafeUser }) {
+export function Username({ user }: { user: PublicUser }) {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>

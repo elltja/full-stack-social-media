@@ -1,7 +1,7 @@
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
 import { getCurrentUser } from "@/features/auth/lib/user";
-import AuthProvider from "@/providers/AuthProvider";
+import AuthProvider from "@/context/AuthContext";
 import { redirect } from "next/navigation";
 
 import React from "react";
@@ -12,9 +12,6 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
-  if (!user) {
-    redirect("/accounts/signin");
-  }
 
   if (!user.profile_completed) {
     redirect("/accounts/profile");

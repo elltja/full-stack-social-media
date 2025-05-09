@@ -1,6 +1,6 @@
 import ProfilePicture from "@/components/ProfilePicture";
 import { Username } from "@/components/Username";
-import { SafeUser } from "@/lib/prisma";
+import { PublicUser } from "@/lib/server/prisma";
 import { type Comment } from "@prisma/client";
 import React from "react";
 
@@ -9,7 +9,7 @@ export default function Comment({
   author,
 }: {
   data: Comment;
-  author: SafeUser;
+  author: PublicUser;
 }) {
   return (
     <div className="h-fit bg-background rounded-md shadow flex flex-col p-5 gap-5 md:gap-4">

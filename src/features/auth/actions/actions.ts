@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/server/prisma";
 import { signUpSchema } from "../lib/schemas";
 import type {
   ProfileFormState,
@@ -17,7 +17,7 @@ import "server-only";
 import { getCurrentUser } from "../lib/user";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { COOKIE_SESSION_KEY } from "../lib/constants";
-import { redis } from "@/lib/redis";
+import { redis } from "@/lib/server/redis";
 
 export async function signUp({
   username,

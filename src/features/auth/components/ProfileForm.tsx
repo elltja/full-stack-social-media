@@ -9,11 +9,10 @@ import { Button } from "@/components/ui/button";
 import { ProfileFormState } from "../lib/types";
 import { createProfile } from "../actions/actions";
 import Form from "next/form";
-import { useAuth } from "@/providers/AuthProvider";
-import { SafeUser } from "@/lib/prisma";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProfileForm() {
-  const user = useAuth() as SafeUser;
+  const user = useAuth();
 
   const initialState: ProfileFormState = {
     inputs: {

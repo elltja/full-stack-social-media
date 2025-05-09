@@ -1,23 +1,14 @@
-"use client";
-
-import { Bookmark } from "lucide-react";
-import React, { useState } from "react";
-import { savePost, unSavePost } from "../actions/actions";
-import { useAuth } from "@/providers/AuthProvider";
-import { SafeUser } from "@/lib/prisma";
+import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
+import { PublicUser } from "@/lib/server/prisma";
 import { toast } from "sonner";
 import { Save } from "@prisma/client";
+import { savePost, unSavePost } from "../actions/saves";
 
-export default function SaveIcon({
-  postId,
-  saves,
-}: {
-  postId: string;
-  saves: Save[];
-}) {
-  const user = useAuth() as SafeUser;
+export default function useSave(postId: string, initialSaves: Save[]) {
+  const user = useAuth() as PublicUser;
   const [saved, setSaved] = useState<boolean>(
-    !!saves.find((save) => save.user_id === user.id)
+    !!initialSaves.find((save) => save.user_id === user?.id)
   );
   async function handleSave() {
     setSaved(true);
@@ -41,12 +32,6 @@ export default function SaveIcon({
       },
     });
   }
-  return (
-    <Bookmark
-      onClick={saved ? handleUnsave : handleSave}
-      fill={saved ? "yello" : "transparent"}
-      stroke={saved ? "yello" : "currentColor"}
-      strokeWidth={1.5}
-    />
-  );
+  const toggleSave = () => (saved ? handleUnsave() : handleSave());
+  return { saved, toggleSave };
 }

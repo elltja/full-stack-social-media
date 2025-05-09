@@ -1,18 +1,19 @@
-import { prisma, SafeUser } from "@/lib/prisma";
+import { prisma, PublicUser } from "@/lib/server/prisma";
 import { getUserSession } from "./sessionUtils";
 import { cache } from "react";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 async function _getCurrentUser() {
   const userSession = await getUserSession(await cookies());
-  if (!userSession) return null;
-  const fullUser = (await prisma.user.findUnique({
+  if (!userSession) redirect("/accounts/login");
+  const user = await prisma.user.findUnique({
     where: { id: userSession.id },
-  })) as SafeUser;
+  });
 
-  if (!fullUser) return null;
+  if (!user) redirect("/accounts/login");
 
-  return fullUser;
+  return user as PublicUser;
 }
 
 export async function isAuthenticated(): Promise<boolean> {

@@ -3,7 +3,7 @@ import Post from "@/features/posts/components/Post";
 import WritePost from "@/features/posts/components/WritePost";
 import { ScrollArea } from "./ui/scroll-area";
 import PostSkeleton from "../features/posts/components/PostSkeleton";
-import { FullPost, prisma } from "@/lib/prisma";
+import { FullPost, prisma } from "@/lib/server/prisma";
 
 export default async function Feed() {
   return (

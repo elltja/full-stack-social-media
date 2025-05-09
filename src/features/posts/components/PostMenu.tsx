@@ -18,8 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SafeUser } from "@/lib/prisma";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "@/context/AuthContext";
 import { Ellipsis, TrashIcon } from "lucide-react";
 import React, { useState } from "react";
 import { deletePost } from "../actions/actions";
@@ -31,7 +30,7 @@ export default function PostMenu({
   authorId: string;
   postId: string;
 }) {
-  const user = useAuth() as SafeUser;
+  const user = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>

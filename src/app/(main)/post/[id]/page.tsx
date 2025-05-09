@@ -1,9 +1,9 @@
 import React from "react";
 import Post from "@/features/posts/components/Post";
-import { FullPostWithFullComments, prisma } from "@/lib/prisma";
+import { FullPostWithFullComments, prisma } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
-import Comment from "@/features/posts/components/Comment";
-import WriteComment from "@/features/posts/components/WriteComment";
+import Comment from "@/features/comments/components/Comment";
+import WriteComment from "@/features/comments/components/WriteComment";
 
 export default async function PostPage({
   params,

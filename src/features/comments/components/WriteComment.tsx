@@ -2,7 +2,7 @@
 
 import React, { useActionState } from "react";
 import Form from "next/form";
-import { createComment } from "../actions/actions";
+import { createComment } from "../actions/action";
 import { CommentFormState } from "../lib/types";
 import { LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";

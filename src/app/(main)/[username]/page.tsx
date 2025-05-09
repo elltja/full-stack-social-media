@@ -1,6 +1,6 @@
 import ProfilePicture from "@/components/ProfilePicture";
 import { Separator } from "@/components/ui/separator";
-import { FullPost, prisma, SafeUser } from "@/lib/prisma";
+import { FullPost, prisma, PublicUser } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
 import Post from "@/features/posts/components/Post";
 import React from "react";
@@ -36,7 +36,7 @@ export default async function Profile({
         },
       },
     },
-  })) as SafeUser & {
+  })) as PublicUser & {
     posts: FullPost[];
   };
 
@@ -58,11 +58,11 @@ export default async function Profile({
       </div>
       <div>
         <h3 className="font-semibold">Bio</h3>
-        <p>{user.bio}</p>
+        <p className="text-gray-500">{user.bio}</p>
       </div>
       <div>
         <h3 className="font-semibold">Joined</h3>
-        <p>{user.created_at.toLocaleDateString()}</p>
+        <p className="text-gray-500">{user.created_at.toLocaleDateString()}</p>
       </div>
       <Separator />
       <div className="">

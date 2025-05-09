@@ -11,13 +11,12 @@ import {
 import { Button } from "./ui/button";
 import ProfilePicture from "./ProfilePicture";
 import { Edit, LogOutIcon, User } from "lucide-react";
-import { useAuth } from "@/providers/AuthProvider";
-import { SafeUser } from "@/lib/prisma";
+import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { signOut } from "@/features/auth/actions/actions";
 
 export default function ProfileDropdown() {
-  const user = useAuth() as SafeUser;
+  const user = useAuth();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

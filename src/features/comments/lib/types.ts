@@ -1,4 +1,4 @@
-export type PostFormState = {
+export type CommentFormState = {
   error?: string;
   text: string;
 };

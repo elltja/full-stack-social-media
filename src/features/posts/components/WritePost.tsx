@@ -8,8 +8,7 @@ import ProfilePicture from "@/components/ProfilePicture";
 import { LoaderCircle, MapPin, Upload } from "lucide-react";
 import ImageUploader from "@/components/ImageUploader";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/providers/AuthProvider";
-import { redirect } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const initialFormState: PostFormState = {
   text: "",
@@ -17,9 +16,7 @@ const initialFormState: PostFormState = {
 
 export default function WritePost() {
   const user = useAuth();
-  if (!user) {
-    redirect("/accounts/signin");
-  }
+
   const [formState, formAction, isPending] = useActionState(
     createPost,
     initialFormState

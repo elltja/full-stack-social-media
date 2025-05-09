@@ -1,11 +1,11 @@
-import { redis } from "@/lib/redis";
+import { redis } from "@/lib/server/redis";
 import { Cookies } from "./types";
-import { SafeUser } from "@/lib/prisma";
+import { PublicUser } from "@/lib/server/prisma";
 import crypto from "crypto";
 import { COOKIE_SESSION_KEY, SESSION_EXPIRATION_SECONDS } from "./constants";
 
 export async function createUserSession(
-  user: SafeUser,
+  user: PublicUser,
   cookies: Pick<Cookies, "set">
 ) {
   try {

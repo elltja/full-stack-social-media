@@ -1,7 +1,7 @@
 import React from "react";
 import ProfilePicture from "@/components/ProfilePicture";
 import { Username } from "@/components/Username";
-import { SafeUser } from "@/lib/prisma";
+import { PublicUser } from "@/lib/server/prisma";
 import PostMenu from "./PostMenu";
 import { Post } from "@prisma/client";
 
@@ -9,7 +9,7 @@ export default function PostHeader({
   author,
   data,
 }: {
-  author: SafeUser;
+  author: PublicUser;
   data: Post;
 }) {
   return (

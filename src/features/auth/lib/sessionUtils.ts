@@ -1,4 +1,4 @@
-import { redis } from "@/lib/redis";
+import { redis } from "@/lib/server/redis";
 import { Cookies, SessionSchema } from "./types";
 import { COOKIE_SESSION_KEY } from "./constants";
 
