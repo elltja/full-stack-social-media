@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/lib/context/AuthContext";
 import { useState } from "react";
 import { PublicUser } from "@/lib/server/prisma";
 import { toast } from "sonner";

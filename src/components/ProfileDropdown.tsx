@@ -11,7 +11,7 @@ import {
 import { Button } from "./ui/button";
 import ProfilePicture from "./ProfilePicture";
 import { Edit, LogOutIcon, User } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/lib/context/AuthContext";
 import Link from "next/link";
 import { signOut } from "@/features/auth/actions/actions";
 

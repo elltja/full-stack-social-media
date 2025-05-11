@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/lib/context/AuthContext";
 import { Like } from "@prisma/client";
 import { useState } from "react";
 import { toast } from "sonner";

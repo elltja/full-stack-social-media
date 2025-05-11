@@ -1,29 +1,32 @@
-import { Comment, Like, Post, PrismaClient, Save, User } from "@prisma/client";
+import { Prisma, PrismaClient, User } from "@prisma/client";
 import "server-only";
 
 export type PublicUser = Omit<User, "password" | "salt">;
-export type PostWithUser = Post & {
-  author: User;
-};
 
-export type FullPost = Post & {
-  author: User;
-  likes: Like[];
-  saves: Save[];
-};
+export type PostWithAUthor = Prisma.PostGetPayload<{
+  include: { author: { omit: { password: true; salt: true } } };
+}>;
 
-export type FullPostWithFullComments = Post & {
-  author: User;
-  likes: Like[];
-  comments: (Comment & {
-    user: PublicUser;
-  })[];
-  saves: Save[];
-};
+export type PostWithLikesAndSaves = Prisma.PostGetPayload<{
+  include: {
+    likes: true;
+    saves: true;
+  };
+}>;
 
-export type UserWithPosts = PublicUser & {
-  posts: FullPost[];
-};
+export type PostWithLikesSavesAndComments = Prisma.PostGetPayload<{
+  include: {
+    author: true;
+    likes: true;
+    saves: true;
+    comments: { include: { user: true } };
+  };
+}>;
+
+export type UserWithPosts = Prisma.UserGetPayload<{
+  omit: { password: true; salt: true };
+  include: { posts: true };
+}>;
 
 export const prisma = new PrismaClient({
   omit: {

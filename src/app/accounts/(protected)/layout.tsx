@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/features/auth/lib/user";
-import AuthProvider from "@/context/AuthContext";
+import AuthProvider from "@/lib/context/AuthContext";
 import React from "react";
 
 export default async function ProtectedAccountsLayout({

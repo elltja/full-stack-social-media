@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ProfileFormState } from "../lib/types";
 import { createProfile } from "../actions/actions";
 import Form from "next/form";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/lib/context/AuthContext";
 
 export default function ProfileForm() {
   const user = useAuth();

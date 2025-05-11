@@ -1,7 +1,7 @@
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
 import { getCurrentUser } from "@/features/auth/lib/user";
-import AuthProvider from "@/context/AuthContext";
+import AuthProvider from "@/lib/context/AuthContext";
 import { redirect } from "next/navigation";
 
 import React from "react";

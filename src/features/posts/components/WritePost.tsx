@@ -8,7 +8,7 @@ import ProfilePicture from "@/components/ProfilePicture";
 import { LoaderCircle, MapPin, Upload } from "lucide-react";
 import ImageUploader from "@/components/ImageUploader";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/lib/context/AuthContext";
 
 const initialFormState: PostFormState = {
   text: "",

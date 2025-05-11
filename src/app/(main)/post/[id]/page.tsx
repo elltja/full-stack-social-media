@@ -1,6 +1,6 @@
 import React from "react";
 import Post from "@/features/posts/components/Post";
-import { FullPostWithFullComments, prisma } from "@/lib/server/prisma";
+import { PostWithLikesSavesAndComments, prisma } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
 import Comment from "@/features/comments/components/Comment";
 import WriteComment from "@/features/comments/components/WriteComment";
@@ -20,12 +20,14 @@ export default async function PostPage({
       likes: true,
       comments: {
         include: {
-          user: true,
+          user: {
+            omit: { password: true, salt: true },
+          },
         },
       },
       saves: true,
     },
-  })) as unknown as FullPostWithFullComments;
+  })) as PostWithLikesSavesAndComments;
   if (!post) notFound();
 
   return (

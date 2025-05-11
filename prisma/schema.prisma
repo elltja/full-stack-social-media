@@ -70,6 +70,6 @@ model Comment {
   content    String
   user_id    String
   post_id    String
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  author     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   post       Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
 }

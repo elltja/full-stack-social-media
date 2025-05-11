@@ -18,7 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/lib/context/AuthContext";
 import { Ellipsis, TrashIcon } from "lucide-react";
 import React, { useState } from "react";
 import { deletePost } from "../actions/actions";

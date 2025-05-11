@@ -34,21 +34,7 @@ async function SuspendedPosts() {
     include: {
       post: {
         include: {
-          author: {
-            select: {
-              name: true,
-              id: true,
-              account_name: true,
-              email: true,
-              bio: true,
-              avatar_url: true,
-              profile_completed: true,
-              role: true,
-              created_at: true,
-              password: true,
-              salt: true,
-            },
-          },
+          author: true,
           likes: true,
           comments: true,
           saves: true,
