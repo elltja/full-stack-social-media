@@ -1,6 +1,6 @@
-import Sidebar from "@/components/Sidebar";
-import Topbar from "@/components/Topbar";
-import { getCurrentUser } from "@/features/auth/lib/user";
+import Sidebar from "@/components/layout/Sidebar";
+import Topbar from "@/components/layout/Topbar";
+import { getCurrentUser } from "@/modules/auth/lib/user";
 import AuthProvider from "@/lib/context/AuthContext";
 import { redirect } from "next/navigation";
 

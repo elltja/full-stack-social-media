@@ -7,13 +7,13 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
 import ProfilePicture from "./ProfilePicture";
 import { Edit, LogOutIcon, User } from "lucide-react";
 import { useAuth } from "@/lib/context/AuthContext";
 import Link from "next/link";
-import { signOut } from "@/features/auth/actions/actions";
+import { signOut } from "@/modules/auth/actions/actions";
 
 export default function ProfileDropdown() {
   const user = useAuth();

@@ -1,4 +1,4 @@
-import ProfilePicture from "@/components/ProfilePicture";
+import ProfilePicture from "@/components/user/ProfilePicture";
 import { Separator } from "@/components/ui/separator";
 import {
   PostWithLikesSavesAndAuthor,
@@ -6,7 +6,7 @@ import {
   PublicUser,
 } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
-import Post from "@/features/posts/components/Post";
+import Post from "@/modules/posts/components/Post";
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 type ProfileParams = {

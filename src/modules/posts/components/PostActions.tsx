@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import CommentIcon from "@/features/posts/components/CommentIcon";
-import ShareIcon from "@/features/posts/components/ShareIcon";
+import CommentIcon from "@/modules/posts/components/CommentIcon";
+import ShareIcon from "@/modules/posts/components/ShareIcon";
 import { Like, Save } from "@prisma/client";
 import { Bookmark, Heart } from "lucide-react";
 import useLike from "../hooks/useLike";

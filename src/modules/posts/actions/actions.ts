@@ -3,7 +3,7 @@
 import "server-only";
 import { prisma } from "@/lib/server/prisma";
 import { PostFormState } from "../lib/types";
-import { getCurrentUser } from "@/features/auth/lib/user";
+import { getCurrentUser } from "@/modules/auth/lib/user";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 

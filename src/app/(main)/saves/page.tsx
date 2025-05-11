@@ -1,8 +1,8 @@
-import { getCurrentUser } from "@/features/auth/lib/user";
+import { getCurrentUser } from "@/modules/auth/lib/user";
 import { prisma } from "@/lib/server/prisma";
-import Post from "@/features/posts/components/Post";
+import Post from "@/modules/posts/components/Post";
 import React, { Suspense } from "react";
-import PostSkeleton from "@/features/posts/components/PostSkeleton";
+import PostSkeleton from "@/modules/posts/components/PostSkeleton";
 
 export default async function Saves() {
   return (

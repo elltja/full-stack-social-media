@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import SignUpForm from "@/features/auth/components/SignUpForm";
+import SignUpForm from "@/modules/auth/components/SignUpForm";
 import Link from "next/link";
 import React from "react";
 

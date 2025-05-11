@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/features/auth/lib/user";
+import { getCurrentUser } from "@/modules/auth/lib/user";
 import AuthProvider from "@/lib/context/AuthContext";
 import React from "react";
 

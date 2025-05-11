@@ -1,9 +1,9 @@
 import React from "react";
-import Post from "@/features/posts/components/Post";
+import Post from "@/modules/posts/components/Post";
 import { PostWithLikesSavesAndComments, prisma } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
-import Comment from "@/features/comments/components/Comment";
-import WriteComment from "@/features/comments/components/WriteComment";
+import Comment from "@/modules/comments/components/Comment";
+import WriteComment from "@/modules/comments/components/WriteComment";
 
 export default async function PostPage({
   params,

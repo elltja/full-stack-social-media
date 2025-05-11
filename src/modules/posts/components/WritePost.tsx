@@ -4,7 +4,7 @@ import React, { useActionState } from "react";
 import Form from "next/form";
 import { createPost } from "../actions/actions";
 import { PostFormState } from "../lib/types";
-import ProfilePicture from "@/components/ProfilePicture";
+import ProfilePicture from "@/components/user/ProfilePicture";
 import { LoaderCircle, MapPin, Upload } from "lucide-react";
 import ImageUploader from "@/components/ImageUploader";
 import { Button } from "@/components/ui/button";

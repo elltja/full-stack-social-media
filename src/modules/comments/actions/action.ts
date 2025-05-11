@@ -1,6 +1,6 @@
 "use server";
 
-import { getCurrentUser } from "@/features/auth/lib/user";
+import { getCurrentUser } from "@/modules/auth/lib/user";
 import { prisma } from "@/lib/server/prisma";
 import { revalidatePath } from "next/cache";
 import "server-only";

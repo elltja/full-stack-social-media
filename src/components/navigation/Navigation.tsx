@@ -1,7 +1,7 @@
 import React from "react";
-import ProfileDropdown from "./ProfileDropdown";
+import ProfileDropdown from "../user/ProfileDropdown";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Bookmark, List } from "lucide-react";
 
 export default function Navigation() {

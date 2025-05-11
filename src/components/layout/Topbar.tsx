@@ -1,6 +1,6 @@
 import React from "react";
-import Logo from "./Logo";
-import MobileMenu from "./MobileMenu";
+import Logo from "../Logo";
+import MobileMenu from "../navigation/MobileMenu";
 
 export default function Topbar() {
   return (
