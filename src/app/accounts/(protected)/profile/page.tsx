@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import ProfileForm from "@/modules/auth/components/ProfileForm";
+import ProfileForm from "@/modules/user/components/ProfileForm";
 import React from "react";
 
 export default async function Profile() {

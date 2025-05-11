@@ -1,6 +1,6 @@
 import React from "react";
-import ProfilePicture from "@/components/user/ProfilePicture";
-import { Username } from "@/components/user/Username";
+import ProfilePicture from "@/modules/user/components/ProfilePicture";
+import { Username } from "@/modules/user/components/Username";
 import { PublicUser } from "@/lib/server/prisma";
 import PostMenu from "./PostMenu";
 import { Post } from "@prisma/client";

@@ -1,6 +1,6 @@
 import React from "react";
 import Post from "@/modules/posts/components/Post";
-import { PostWithLikesSavesAndComments, prisma } from "@/lib/server/prisma";
+import { prisma } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
 import Comment from "@/modules/comments/components/Comment";
 import WriteComment from "@/modules/comments/components/WriteComment";
@@ -11,7 +11,7 @@ export default async function PostPage({
   params: Promise<{ id: string }>;
 }) {
   const postId = (await params).id;
-  const post = (await prisma.post.findUnique({
+  const post = await prisma.post.findUnique({
     where: {
       id: postId,
     },
@@ -20,14 +20,14 @@ export default async function PostPage({
       likes: true,
       comments: {
         include: {
-          user: {
+          author: {
             omit: { password: true, salt: true },
           },
         },
       },
       saves: true,
     },
-  })) as PostWithLikesSavesAndComments;
+  });
   if (!post) notFound();
 
   return (
@@ -38,7 +38,11 @@ export default async function PostPage({
         <div className="w-full px-5 flex flex-col gap-3">
           {post.comments.map((comment) => {
             return (
-              <Comment key={comment.id} data={comment} author={comment.user} />
+              <Comment
+                key={comment.id}
+                data={comment}
+                author={comment.author}
+              />
             );
           })}
         </div>

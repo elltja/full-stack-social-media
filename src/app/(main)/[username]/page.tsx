@@ -1,10 +1,6 @@
-import ProfilePicture from "@/components/user/ProfilePicture";
+import ProfilePicture from "@/modules/user/components/ProfilePicture";
 import { Separator } from "@/components/ui/separator";
-import {
-  PostWithLikesSavesAndAuthor,
-  prisma,
-  PublicUser,
-} from "@/lib/server/prisma";
+import { prisma } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
 import Post from "@/modules/posts/components/Post";
 import React from "react";
@@ -29,7 +25,7 @@ export default async function Profile({
 
   if (!username) notFound();
 
-  const user = (await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: { account_name: username },
     include: {
       posts: {
@@ -40,9 +36,7 @@ export default async function Profile({
         },
       },
     },
-  })) as PublicUser & {
-    posts: PostWithLikesSavesAndAuthor[];
-  };
+  });
 
   if (!user) notFound();
 

@@ -7,8 +7,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import ProfilePicture from "./ProfilePicture";
 import { Edit, LogOutIcon, User } from "lucide-react";
 import { useAuth } from "@/lib/context/AuthContext";

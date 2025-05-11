@@ -1,5 +1,5 @@
-import ProfilePicture from "@/components/user/ProfilePicture";
-import { Username } from "@/components/user/Username";
+import ProfilePicture from "@/modules/user/components/ProfilePicture";
+import { Username } from "@/modules/user/components/Username";
 import { PublicUser } from "@/lib/server/prisma";
 import { type Comment } from "@prisma/client";
 import React from "react";

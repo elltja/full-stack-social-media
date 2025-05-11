@@ -23,6 +23,8 @@ model User {
   likes             Like[]
   comments          Comment[]
   saves             Save[]
+  followers         User[]    @relation("UserFollows")
+  following         User[]    @relation("UserFollows")
 }
 
 enum Role {

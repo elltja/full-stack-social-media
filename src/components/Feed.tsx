@@ -3,7 +3,7 @@ import Post from "@/modules/posts/components/Post";
 import WritePost from "@/modules/posts/components/WritePost";
 import { ScrollArea } from "./ui/scroll-area";
 import PostSkeleton from "../modules/posts/components/PostSkeleton";
-import { PostWithLikesSavesAndAuthor, prisma } from "@/lib/server/prisma";
+import { prisma } from "@/lib/server/prisma";
 
 export default async function Feed() {
   return (
@@ -33,14 +33,14 @@ export default async function Feed() {
 }
 
 async function SuspendedPosts() {
-  const posts = (await prisma.post.findMany({
+  const posts = await prisma.post.findMany({
     include: {
       author: true,
       likes: true,
       comments: true,
       saves: true,
     },
-  })) as PostWithLikesSavesAndAuthor[];
+  });
   return (
     <>
       {posts.map((post) => {

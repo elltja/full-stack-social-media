@@ -1,8 +1,8 @@
 import React from "react";
-import ProfileDropdown from "../user/ProfileDropdown";
+import ProfileDropdown from "../../modules/user/components/ProfileDropdown";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { Bookmark, List } from "lucide-react";
+import { Bookmark, List, Users } from "lucide-react";
 
 export default function Navigation() {
   return (
@@ -18,6 +18,12 @@ export default function Navigation() {
         <Button variant="ghost" className="w-full justify-start cursor-pointer">
           <Bookmark />
           Saves
+        </Button>
+      </Link>
+      <Link href="/following" legacyBehavior passHref>
+        <Button variant="ghost" className="w-full justify-start cursor-pointer">
+          <Users />
+          Following
         </Button>
       </Link>
     </div>

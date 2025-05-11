@@ -3,7 +3,6 @@
 import { prisma } from "@/lib/server/prisma";
 import { signUpSchema } from "../lib/schemas";
 import type {
-  ProfileFormState,
   SignInFormInputs,
   SignInFormState,
   SignUpFormInputs,
@@ -14,7 +13,6 @@ import { createUserSession } from "../lib/session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import "server-only";
-import { getCurrentUser } from "../lib/user";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { COOKIE_SESSION_KEY } from "../lib/constants";
 import { redis } from "@/lib/server/redis";
@@ -122,49 +120,6 @@ export async function signIn({
   } catch (error) {
     if (isRedirectError(error)) throw error;
 
-    console.error(error);
-    return { inputs, error: "Internal server error" };
-  }
-}
-
-export async function createProfile(
-  state: ProfileFormState,
-  formData: unknown
-): Promise<ProfileFormState> {
-  if (!(formData instanceof FormData)) {
-    return { error: "Invalid request", inputs: { bio: "", name: "" } };
-  }
-
-  const name = formData.get("name") as string;
-  const bio = formData.get("bio") as string;
-  const inputs = {
-    name,
-    bio,
-  };
-  const fieldErrors: ProfileFormState["fieldErrors"] = {};
-
-  if (!name) fieldErrors.name = "Name is required";
-  if (!bio) fieldErrors.bio = "Bio is required";
-
-  if (Object.keys(fieldErrors).length > 0) return { fieldErrors, inputs };
-
-  try {
-    const currentUser = await getCurrentUser();
-
-    await prisma.user.update({
-      where: { id: currentUser?.id },
-      data: {
-        name,
-        bio,
-        profile_completed: true,
-      },
-    });
-
-    // TODO: File upload
-
-    redirect("/");
-  } catch (error) {
-    if (isRedirectError(error)) throw error;
     console.error(error);
     return { inputs, error: "Internal server error" };
   }
