@@ -26,10 +26,10 @@ export default async function Saves() {
 }
 
 async function SuspendedPosts() {
-  const user = await getCurrentUser();
+  const currentUser = await getCurrentUser();
   const saves = await prisma.save.findMany({
     where: {
-      user_id: user.id,
+      user_id: currentUser.id,
     },
     include: {
       post: {

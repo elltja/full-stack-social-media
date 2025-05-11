@@ -11,15 +11,15 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getCurrentUser();
+  const currentUser = await getCurrentUser();
 
-  if (!user.profile_completed) {
+  if (!currentUser.profile_completed) {
     redirect("/accounts/profile");
   }
 
   return (
     <div className="h-screen max-h-screen overflow-hidden">
-      <AuthProvider user={user}>
+      <AuthProvider user={currentUser}>
         <Topbar />
         <div className="flex h-full">
           <Sidebar />

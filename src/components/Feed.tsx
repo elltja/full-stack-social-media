@@ -3,7 +3,7 @@ import Post from "@/features/posts/components/Post";
 import WritePost from "@/features/posts/components/WritePost";
 import { ScrollArea } from "./ui/scroll-area";
 import PostSkeleton from "../features/posts/components/PostSkeleton";
-import { FullPost, prisma } from "@/lib/server/prisma";
+import { PostWithLikesSavesAndAuthor, prisma } from "@/lib/server/prisma";
 
 export default async function Feed() {
   return (
@@ -40,7 +40,7 @@ async function SuspendedPosts() {
       comments: true,
       saves: true,
     },
-  })) as unknown as FullPost[];
+  })) as PostWithLikesSavesAndAuthor[];
   return (
     <>
       {posts.map((post) => {

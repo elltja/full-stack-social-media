@@ -149,10 +149,10 @@ export async function createProfile(
   if (Object.keys(fieldErrors).length > 0) return { fieldErrors, inputs };
 
   try {
-    const user = await getCurrentUser();
+    const currentUser = await getCurrentUser();
 
     await prisma.user.update({
-      where: { id: user?.id },
+      where: { id: currentUser?.id },
       data: {
         name,
         bio,
@@ -173,8 +173,11 @@ export async function createProfile(
 export async function signOut() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get(COOKIE_SESSION_KEY)?.value;
+
   if (sessionId == null) return null;
+
   await redis.del(`session:${sessionId}`);
   cookieStore.delete(COOKIE_SESSION_KEY);
+
   redirect("/accounts/signin");
 }

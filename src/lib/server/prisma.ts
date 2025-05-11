@@ -7,16 +7,17 @@ export type PostWithAUthor = Prisma.PostGetPayload<{
   include: { author: { omit: { password: true; salt: true } } };
 }>;
 
-export type PostWithLikesAndSaves = Prisma.PostGetPayload<{
+export type PostWithLikesSavesAndAuthor = Prisma.PostGetPayload<{
   include: {
     likes: true;
     saves: true;
+    author: { omit: { password: true; salt: true } };
   };
 }>;
 
 export type PostWithLikesSavesAndComments = Prisma.PostGetPayload<{
   include: {
-    author: true;
+    author: { omit: { password: true; salt: true } };
     likes: true;
     saves: true;
     comments: { include: { user: true } };

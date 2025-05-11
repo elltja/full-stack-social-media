@@ -7,7 +7,7 @@ export default async function ProtectedAccountsLayout({
 }: {
   children: Readonly<React.ReactNode>;
 }) {
-  const user = await getCurrentUser();
+  const currentUser = await getCurrentUser();
 
-  return <AuthProvider user={user}>{children}</AuthProvider>;
+  return <AuthProvider user={currentUser}>{children}</AuthProvider>;
 }

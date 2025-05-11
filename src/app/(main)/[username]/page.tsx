@@ -1,6 +1,10 @@
 import ProfilePicture from "@/components/ProfilePicture";
 import { Separator } from "@/components/ui/separator";
-import { FullPost, prisma, PublicUser } from "@/lib/server/prisma";
+import {
+  PostWithLikesSavesAndAuthor,
+  prisma,
+  PublicUser,
+} from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
 import Post from "@/features/posts/components/Post";
 import React from "react";
@@ -37,7 +41,7 @@ export default async function Profile({
       },
     },
   })) as PublicUser & {
-    posts: FullPost[];
+    posts: PostWithLikesSavesAndAuthor[];
   };
 
   if (!user) notFound();
