@@ -2,15 +2,16 @@ import React from "react";
 import ProfilePicture from "@/modules/user/components/ProfilePicture";
 import { Username } from "@/modules/user/components/Username";
 import { PublicUser } from "@/lib/server/prisma";
-import PostMenu from "./PostMenu";
-import { Post } from "@prisma/client";
+import PostMenu from "../PostMenu";
 
 export default function PostHeader({
   author,
-  data,
+  createdAt,
+  postId,
 }: {
   author: PublicUser;
-  data: Post;
+  createdAt: Date;
+  postId: string;
 }) {
   return (
     <div className="flex justify-between items-center">
@@ -22,12 +23,10 @@ export default function PostHeader({
         />
         <div className="flex flex-col">
           <Username user={author} />
-          <p className="text-gray-400">
-            {data.created_at.toLocaleDateString()}
-          </p>
+          <p className="text-gray-400">{createdAt.toLocaleDateString()}</p>
         </div>
       </div>
-      <PostMenu authorId={author.id} postId={data.id} />
+      <PostMenu authorId={author.id} postId={postId} />
     </div>
   );
 }

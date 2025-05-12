@@ -14,7 +14,7 @@ const initialFormState: PostFormState = {
   text: "",
 };
 
-export default function WritePost() {
+export default function PostComposer() {
   const user = useAuth();
 
   const [formState, formAction, isPending] = useActionState(

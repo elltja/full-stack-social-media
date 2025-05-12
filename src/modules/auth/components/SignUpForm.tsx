@@ -38,7 +38,7 @@ export default function SignUpForm() {
           aria-invalid={!!formState.fieldErrors?.username}
         />
         {formState.fieldErrors?.username && (
-          <p className="text-destructive text-sm">
+          <p className="text-destructive text-sm" aria-live="polite">
             {formState.fieldErrors?.username}
           </p>
         )}
@@ -54,7 +54,7 @@ export default function SignUpForm() {
           defaultValue={formState.inputs.email}
         />
         {formState.fieldErrors?.email && (
-          <p className="text-destructive text-sm my-0">
+          <p className="text-destructive text-sm my-0" aria-live="polite">
             {formState.fieldErrors?.email}
           </p>
         )}
@@ -70,7 +70,7 @@ export default function SignUpForm() {
           defaultValue={formState.inputs.password}
         />
         {formState.fieldErrors?.password && (
-          <p className="text-destructive text-sm">
+          <p className="text-destructive text-sm" aria-live="polite">
             {formState.fieldErrors?.password}
           </p>
         )}
@@ -86,7 +86,7 @@ export default function SignUpForm() {
           defaultValue={formState.inputs.confirmPassword}
         />
         {formState.fieldErrors?.confirmPassword && (
-          <p className="text-destructive text-sm">
+          <p className="text-destructive text-sm" aria-live="polite">
             {formState.fieldErrors?.confirmPassword}
           </p>
         )}

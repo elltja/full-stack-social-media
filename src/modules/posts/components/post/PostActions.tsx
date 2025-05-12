@@ -5,8 +5,8 @@ import CommentIcon from "@/modules/posts/components/CommentIcon";
 import ShareIcon from "@/modules/posts/components/ShareIcon";
 import { Like, Save } from "@prisma/client";
 import { Bookmark, Heart } from "lucide-react";
-import useLike from "../hooks/useLike";
-import useSave from "../hooks/useSave";
+import useLike from "../../hooks/useLike";
+import useSave from "../../hooks/useSave";
 
 interface PostActionsProps {
   initialLikes: Like[];

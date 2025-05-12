@@ -18,8 +18,6 @@ const initialState: SignInFormState = {
 };
 
 export default function SignInForm() {
-  // const [formState, signUpAction] = useActionState(signUp, initialState);
-
   const [formState, signInAction, isPending] = useActionState(
     parseFormData<SignInFormState>(signIn),
     initialState
@@ -38,7 +36,7 @@ export default function SignInForm() {
           defaultValue={formState.inputs.email}
         />
         {formState.fieldErrors?.email && (
-          <p className="text-destructive text-sm my-0">
+          <p className="text-destructive text-sm my-0" aria-live="polite">
             {formState.fieldErrors?.email}
           </p>
         )}
@@ -54,7 +52,7 @@ export default function SignInForm() {
           defaultValue={formState.inputs.password}
         />
         {formState.fieldErrors?.password && (
-          <p className="text-destructive text-sm">
+          <p className="text-destructive text-sm" aria-live="polite">
             {formState.fieldErrors?.password}
           </p>
         )}

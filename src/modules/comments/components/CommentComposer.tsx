@@ -11,7 +11,7 @@ const initialFormState: CommentFormState = {
   text: "",
 };
 
-export default function WriteComment({ postId }: { postId: string }) {
+export default function CommentComposer({ postId }: { postId: string }) {
   const [formState, formAction, isPending] = useActionState(
     async (_: unknown, formData: FormData) =>
       await createComment(formData.get("text") as string, postId),

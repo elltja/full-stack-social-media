@@ -66,7 +66,7 @@ export async function followUser(userId: string) {
   revalidatePath("/");
 }
 
-export async function getUserFollowing(currentUserId: string) {
+export async function getFollowingUsers(currentUserId: string) {
   const user = await prisma.user.findUnique({
     where: {
       id: currentUserId,
