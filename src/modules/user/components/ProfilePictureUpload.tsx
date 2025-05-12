@@ -2,11 +2,13 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/lib/context/AuthContext";
 import Image from "next/image";
 import React, { useState, useRef } from "react";
 
 export default function ProfilePictureUpload() {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const user = useAuth();
+  const [imageUrl, setImageUrl] = useState<string | null>(user.avatar_url);
   const pictureRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = () => {
@@ -33,6 +35,7 @@ export default function ProfilePictureUpload() {
         ref={pictureRef}
         id="profile-picture-input"
         type="file"
+        name="profile-picture"
         className="hidden"
         onChange={handleFileChange}
       />

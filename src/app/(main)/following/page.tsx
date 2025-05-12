@@ -1,9 +1,9 @@
 import { getCurrentUser } from "@/modules/auth/lib/user";
 import { prisma } from "@/lib/server/prisma";
-import Post from "@/modules/posts/components/Post";
+import Post from "@/modules/posts/components/post/Post";
 import React, { Suspense } from "react";
 import PostSkeleton from "@/modules/posts/components/PostSkeleton";
-import { getUserFollowing } from "@/modules/user/actions/actions";
+import { getFollowingUsers } from "@/modules/user/actions/actions";
 
 export default async function Following() {
   return (
@@ -28,7 +28,7 @@ export default async function Following() {
 
 async function SuspendedPosts() {
   const currentUser = await getCurrentUser();
-  const currentUserFollowing = await getUserFollowing(currentUser.id);
+  const currentUserFollowing = await getFollowingUsers(currentUser.id);
   const posts = await prisma.post.findMany({
     where: {
       author_id: {

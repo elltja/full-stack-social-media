@@ -6,12 +6,12 @@ import { redirect } from "next/navigation";
 
 async function _getCurrentUser() {
   const userSession = await getUserSession(await cookies());
-  if (!userSession) redirect("/accounts/login");
+  if (!userSession) redirect("/accounts/signup");
   const user = await prisma.user.findUnique({
     where: { id: userSession.id },
   });
 
-  if (!user) redirect("/accounts/login");
+  if (!user) redirect("/accounts/signup");
 
   return user as PublicUser;
 }

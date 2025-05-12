@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "@/modules/posts/components/Post";
+import Post from "@/modules/posts/components/post/Post";
 import { prisma } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
 import Comment from "@/modules/comments/components/Comment";

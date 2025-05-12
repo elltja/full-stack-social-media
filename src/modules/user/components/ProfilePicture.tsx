@@ -5,6 +5,7 @@ import {
   AvatarImage,
 } from "../../../components/ui/avatar";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function ProfilePicture({
   src,
@@ -29,7 +30,7 @@ export default function ProfilePicture({
         <AvatarImage
           src={src}
           alt={`${name}'s profile picture`}
-          className={className}
+          className={cn("w-7 h-7 aspect-square", className)}
           style={style}
         />
         <AvatarFallback className={className} style={style}>

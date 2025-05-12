@@ -7,13 +7,14 @@ import {
 import Link from "next/link";
 import ProfilePicture from "./ProfilePicture";
 import { PublicUser } from "@/lib/server/prisma";
-import { getUserFollowing } from "../actions/actions";
+
 import { getCurrentUser } from "@/modules/auth/lib/user";
 import FollowButton from "./FollowButton";
+import { getFollowingUsers } from "../actions/actions";
 
 export async function Username({ user }: { user: PublicUser }) {
   const currentUser = await getCurrentUser();
-  const currentUserFollowing = await getUserFollowing(currentUser.id);
+  const currentUserFollowing = await getFollowingUsers(currentUser.id);
   const isFollowing = !!currentUserFollowing?.find(
     (followingUser) => followingUser.id === user.id
   );

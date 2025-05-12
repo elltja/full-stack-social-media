@@ -7,6 +7,7 @@ import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
 import "server-only";
 import { ProfileFormState } from "../lib/types";
+import { unUploadFile, uploadFile } from "../lib/uploadFIle";
 
 export async function createProfile(
   _: ProfileFormState,
@@ -32,16 +33,30 @@ export async function createProfile(
   try {
     const currentUser = await getCurrentUser();
 
+    if (currentUser.avatar_url) {
+      await unUploadFile(currentUser.avatar_url);
+    }
+
+    const file = formData.get("profile-picture") as unknown;
+
+    const avatarUrl = await (async () => {
+      if (file instanceof File) {
+        const publicId = await uploadFile(file);
+        console.log({ publicId });
+        return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${publicId}`;
+      }
+      return null;
+    })();
+
     await prisma.user.update({
       where: { id: currentUser?.id },
       data: {
         name,
         bio,
         profile_completed: true,
+        avatar_url: avatarUrl,
       },
     });
-
-    // TODO: File upload
 
     redirect("/");
   } catch (error) {

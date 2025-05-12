@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import Post from "@/modules/posts/components/Post";
+import Post from "@/modules/posts/components/post/Post";
 import PostComposer from "@/modules/posts/components/PostComposer";
 import { ScrollArea } from "./ui/scroll-area";
 import PostSkeleton from "../modules/posts/components/PostSkeleton";
