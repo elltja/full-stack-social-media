@@ -1,5 +1,7 @@
 import { cloudinary } from "@/lib/server/cloudinary";
 
+const PROFILE_PICTURE_FOLDER_NAME = "profile-pictures";
+
 type UploadResult = {
   public_id: string;
 };
@@ -11,7 +13,7 @@ export async function uploadFile(file: File) {
   const result = await new Promise<UploadResult>((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: "profile-pictures",
+        folder: PROFILE_PICTURE_FOLDER_NAME,
       },
       (err, result) => {
         if (err) reject(err);
@@ -26,6 +28,8 @@ export async function uploadFile(file: File) {
 export async function unUploadFile(fileUrl: string) {
   const segments = fileUrl.split("/");
 
-  const publicId = "'profile-picture/" + segments[segments.length - 1];
+  const publicId =
+    `${PROFILE_PICTURE_FOLDER_NAME}/` + segments[segments.length - 1];
+
   await cloudinary.uploader.destroy(publicId);
 }
