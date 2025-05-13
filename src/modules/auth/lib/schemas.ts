@@ -28,6 +28,15 @@ export const signUpSchema = z
     path: ["confirmPassword"],
   });
 
+export const signInSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Invalid email" }),
+  password: z.string().trim().min(1, { message: "Password is required" }),
+});
+
 export const SessionSchema = z.object({
   id: z.string(),
 });

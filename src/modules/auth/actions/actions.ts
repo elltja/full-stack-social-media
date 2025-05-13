@@ -1,9 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/server/prisma";
-import { signUpSchema } from "../lib/schemas";
 import type {
-  SignInFormInputs,
   SignInFormState,
   SignUpFormInputs,
   SignUpFormState,
@@ -16,39 +14,31 @@ import "server-only";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { COOKIE_SESSION_KEY } from "../lib/constants";
 import { redis } from "@/lib/server/redis";
+import { validateSignInForm, validateSignUpForm } from "../lib/validators";
 
-export async function signUp({
-  username,
-  email,
-  password,
-  confirmPassword,
-}: SignUpFormInputs): Promise<SignUpFormState> {
-  const inputs = {
-    username,
-    email,
-    password,
-    confirmPassword,
-  };
-
-  const results = signUpSchema.safeParse(inputs);
-  const errors = results.error?.format();
-
-  if (!results.success) {
+export async function signUp(
+  _: SignUpFormState,
+  formData: unknown
+): Promise<SignUpFormState> {
+  if (!(formData instanceof FormData)) {
     return {
-      fieldErrors: {
-        username: errors?.username?._errors[0],
-        email: errors?.email?._errors[0],
-        password: errors?.password?._errors[0],
-        confirmPassword: errors?.confirmPassword?._errors[0],
-      },
+      error: "Invalid request",
+      inputs: { username: "", email: "", password: "", confirmPassword: "" },
+    };
+  }
+  const { inputs, fieldErrors } = validateSignUpForm(formData);
+
+  if (fieldErrors) {
+    return {
+      fieldErrors,
       inputs,
     };
   }
 
   try {
     const [existingUsername, existingEmail] = await Promise.all([
-      prisma.user.findUnique({ where: { account_name: username } }),
-      prisma.user.findUnique({ where: { email } }),
+      prisma.user.findUnique({ where: { account_name: inputs.username } }),
+      prisma.user.findUnique({ where: { email: inputs.email } }),
     ]);
 
     const fieldErrors: Partial<SignUpFormInputs> = {};
@@ -62,11 +52,11 @@ export async function signUp({
     }
 
     const salt = generateSalt();
-    const hashedPassword = await hashPassword(password, salt);
+    const hashedPassword = await hashPassword(inputs.password, salt);
     const user = await prisma.user.create({
       data: {
-        account_name: username,
-        email,
+        account_name: inputs.username,
+        email: inputs.email,
         password: hashedPassword,
         salt,
       },
@@ -82,18 +72,24 @@ export async function signUp({
   }
 }
 
-export async function signIn({
-  email,
-  password,
-}: SignInFormInputs): Promise<SignInFormState> {
-  const inputs = {
-    email,
-    password,
-  };
+export async function signIn(
+  _: SignInFormState,
+  formData: unknown
+): Promise<SignInFormState> {
+  if (!(formData instanceof FormData)) {
+    return {
+      error: "Invalid request",
+      inputs: { email: "", password: "" },
+    };
+  }
+
+  const { inputs, fieldErrors } = validateSignInForm(formData);
+
+  if (fieldErrors) return { fieldErrors, inputs };
 
   try {
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { email: inputs.email },
       omit: {
         password: false,
         salt: false,
@@ -104,13 +100,13 @@ export async function signIn({
       return { fieldErrors: { email: "User does not exist" }, inputs };
     }
 
-    const isCorrectPassword = comparePasswords({
+    const isCorrectPassword = await comparePasswords({
       hashedPassword: user?.password,
       salt: user?.salt,
-      password,
+      password: inputs.password,
     });
 
-    if (!isCorrectPassword) {
+    if (isCorrectPassword !== true) {
       return { fieldErrors: { password: "Incorrect password" }, inputs };
     }
 

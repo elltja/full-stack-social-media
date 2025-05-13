@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import "server-only";
 import { ProfileFormState } from "../lib/types";
 import { deleteUploadedFile, uploadFile } from "../lib/uploadFile";
-import { validateProfileForm } from "../lib/validateForm";
+import { validateProfileForm } from "../lib/validators";
 
 export async function createProfile(
   _: ProfileFormState,

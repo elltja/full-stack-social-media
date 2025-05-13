@@ -1,4 +1,4 @@
-import { profileSchema } from "./schema";
+import { profileSchema } from "./schemas";
 
 export function validateProfileForm(formData: FormData) {
   const raw = {

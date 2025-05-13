@@ -6,7 +6,6 @@ import { signUp } from "../actions/actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { parseFormData } from "@/lib/utils";
 import { SignUpFormState } from "../lib/types";
 import { LoaderCircle } from "lucide-react";
 
@@ -21,7 +20,7 @@ const initialState: SignUpFormState = {
 
 export default function SignUpForm() {
   const [formState, signUpAction, isPending] = useActionState(
-    parseFormData<SignUpFormState>(signUp),
+    signUp,
     initialState
   );
 
