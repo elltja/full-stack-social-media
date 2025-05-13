@@ -7,18 +7,10 @@ import {
 import Link from "next/link";
 import ProfilePicture from "./ProfilePicture";
 import { PublicUser } from "@/lib/server/prisma";
-
-import { getCurrentUser } from "@/modules/auth/lib/user";
 import FollowButton from "./FollowButton";
-import { getFollowingUsers } from "../actions/actions";
+import { isFollowing } from "../actions/following";
 
 export async function Username({ user }: { user: PublicUser }) {
-  const currentUser = await getCurrentUser();
-  const currentUserFollowing = await getFollowingUsers(currentUser.id);
-  const isFollowing = !!currentUserFollowing?.find(
-    (followingUser) => followingUser.id === user.id
-  );
-
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
@@ -42,7 +34,10 @@ export async function Username({ user }: { user: PublicUser }) {
                 </h3>
                 <p className="text-sm">{user.bio}</p>
               </div>
-              <FollowButton targetUserId={user.id} isFollowing={isFollowing} />
+              <FollowButton
+                targetUserId={user.id}
+                isFollowing={await isFollowing(user.id)}
+              />
             </div>
             <div className="flex items-center pt-2">
               <CalendarDays className="mr-2 h-4 w-4 opacity-70" />

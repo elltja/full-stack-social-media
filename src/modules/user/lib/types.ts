@@ -3,8 +3,10 @@ export type ProfileInputs = {
   bio: string;
 };
 
+type ProfileFieldErrors = Partial<ProfileInputs> & { avatar?: string };
+
 export type ProfileFormState = {
   inputs: ProfileInputs;
-  fieldErrors?: Partial<ProfileInputs>;
+  fieldErrors?: ProfileFieldErrors;
   error?: string;
 };

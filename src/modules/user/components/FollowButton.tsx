@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { followUser } from "../actions/actions";
+import { toggleFollow } from "../actions/following";
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
 
@@ -18,7 +18,7 @@ export default function FollowButton({
       className="cursor-pointer w-[7.5em]"
       onClick={async () => {
         setLoading(true);
-        await followUser(targetUserId);
+        await toggleFollow(targetUserId, isFollowing);
         setLoading(false);
       }}
       variant={isFollowing ? "outline" : "default"}

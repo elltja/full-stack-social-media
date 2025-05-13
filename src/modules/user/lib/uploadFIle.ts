@@ -25,7 +25,7 @@ export async function uploadFile(file: File) {
   return result.public_id;
 }
 
-export async function unUploadFile(fileUrl: string) {
+export async function deleteUploadedFile(fileUrl: string) {
   const segments = fileUrl.split("/");
 
   const publicId =

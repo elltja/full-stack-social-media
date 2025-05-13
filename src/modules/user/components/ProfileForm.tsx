@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ProfileFormState } from "../lib/types";
-import { createProfile } from "../actions/actions";
+import { createProfile } from "../actions/profile";
 import Form from "next/form";
 import { useAuth } from "@/lib/context/AuthContext";
 

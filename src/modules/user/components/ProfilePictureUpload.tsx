@@ -35,7 +35,7 @@ export default function ProfilePictureUpload() {
         ref={pictureRef}
         id="profile-picture-input"
         type="file"
-        name="profile-picture"
+        name="avatar"
         className="hidden"
         onChange={handleFileChange}
       />

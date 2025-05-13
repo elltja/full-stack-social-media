@@ -23,8 +23,8 @@ model User {
   likes             Like[]
   comments          Comment[]
   saves             Save[]
-  followers         User[]    @relation("UserFollows")
-  following         User[]    @relation("UserFollows")
+  followers         Follow[]  @relation("Followee")
+  following         Follow[]  @relation("Follower")
 }
 
 enum Role {
@@ -33,11 +33,23 @@ enum Role {
   MODERATOR
 }
 
+model Follow {
+  id         String   @id @default(uuid())
+  followerId String
+  followeeId String
+  createdAt  DateTime @default(now())
+
+  follower User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followee User @relation("Followee", fields: [followeeId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followeeId])
+}
+
 model Post {
   id         String    @id @default(uuid())
   created_at DateTime  @default(now())
   author_id  String
-  author     User      @relation(fields: [author_id], references: [id])
+  author     User      @relation(fields: [author_id], references: [id], onDelete: Cascade)
   content    String
   likes      Like[]
   comments   Comment[]
