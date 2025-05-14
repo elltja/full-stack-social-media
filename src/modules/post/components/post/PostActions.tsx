@@ -30,6 +30,7 @@ export default function PostActions({
           stroke={liked ? "red" : "currentColor"}
           strokeWidth={liked ? 0 : 1.5}
         />
+
         <CommentIcon postId={postId} />
         <ShareIcon postId={postId} />
       </div>

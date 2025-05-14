@@ -9,7 +9,7 @@ import React from "react";
 export default async function AppLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: Readonly<React.ReactNode>;
 }) {
   const currentUser = await getCurrentUser();
 

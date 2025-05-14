@@ -21,7 +21,7 @@ export default function Comment({
             username={author.account_name}
           />
           <div className="flex flex-col">
-            <Username user={author} />
+            <Username userData={author} />
             <p className="text-gray-400">
               {data.created_at.toLocaleDateString()}
             </p>

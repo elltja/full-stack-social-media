@@ -5,7 +5,12 @@ import { notFound } from "next/navigation";
 import Post from "@/modules/post/components/post/Post";
 import React from "react";
 import { formatDistanceToNowStrict } from "date-fns";
-
+import { getCurrentUser } from "@/modules/auth/lib/user";
+import { isFollowing } from "@/modules/user/actions/following";
+import FollowButton from "@/modules/user/components/FollowButton";
+import { Button } from "@/components/ui/button";
+import { Edit } from "lucide-react";
+import Link from "next/link";
 type ProfileParams = {
   username: string;
 };
@@ -42,68 +47,81 @@ export default async function Profile({
 
   if (!user || !user.profile_completed) notFound();
 
-  const dateDisplay = formatDistanceToNowStrict(user.created_at, {
+  const currentUser = await getCurrentUser();
+
+  const joinDate = formatDistanceToNowStrict(user.created_at, {
     addSuffix: true,
   });
 
+  <ProfilePicture
+    src={user.avatar_url || ""}
+    name={user.name || ""}
+    username={user.account_name}
+    className="w-25 h-25"
+  />;
+
   return (
-    <div className="w-full m-10 bg-background rounded-md shadow p-5 flex flex-col gap-10">
+    <div className="w-full bg-background overflow-auto">
       {/* Header */}
-      <div className="flex gap-5 items-center">
-        <ProfilePicture
-          src={user.avatar_url || ""}
-          name={user.name || ""}
-          username={user.account_name}
-          className="w-25 h-25"
-        />
-        <div className="flex flex-col">
-          <h1 className="font-bold text-xl">
-            {user.name || user.account_name}
-          </h1>
-          <p className="text-gray-700">@{user.account_name}</p>
+      <div className="w-full p-5  flex flex-col gap-6">
+        <div className="flex  gap-6 items-center">
+          <ProfilePicture
+            src={user.avatar_url || ""}
+            name={user.name || ""}
+            username={user.account_name}
+            className="w-25 h-25"
+          />
+          <div>
+            <h1 className="text-2xl font-bold">{user.name}</h1>
+            <p className="text-muted-foreground">@{user.account_name}</p>
+          </div>
         </div>
-      </div>
 
-      <div className="flex gap-5">
-        <div>
-          <span className="font-semibold">{user.posts.length}</span>
-          {"  "}
-          <span className="text-gray-500 text-sm">Posts</span>
+        <div className="flex gap-4 mt-2 text-sm">
+          <span>
+            <strong>{user.posts.length}</strong> Posts
+          </span>
+          <span>
+            <strong>{user.followers.length}</strong> Followers
+          </span>
+          <span>
+            <strong>{user.following.length}</strong> Following
+          </span>
         </div>
-        <div>
-          <span className="font-semibold">{user.followers.length}</span>
-          {"  "}
-          <span className="text-gray-500 text-sm">Followers</span>
-        </div>
-        <div>
-          <span className="font-semibold">{user.following.length}</span>
-          {"  "}
-          <span className="text-gray-500 text-sm">Following</span>
-        </div>
-      </div>
+        {user.id !== currentUser.id ? (
+          <FollowButton
+            isFollowing={await isFollowing(user.id)}
+            targetUserId={user.id}
+          />
+        ) : (
+          <Link href="/accounts/profile">
+            <Button variant="outline" className="w-fit cursor-pointer">
+              <Edit /> Edit Profile
+            </Button>
+          </Link>
+        )}
 
-      {/* Bio */}
-      <div>
-        <h3 className="font-semibold">Bio</h3>
-        <p className="text-gray-500">{user.bio || "No bio provided."}</p>
-      </div>
+        <div>
+          {/* Bio */}
+          <div>
+            <p className="text-gray-800 text-[17px]">
+              {user.bio || "No bio provided."}
+            </p>
+          </div>
 
-      {/* Join date */}
-      <div>
-        <h3 className="font-semibold">Joined</h3>
-        <p className="text-gray-500">{dateDisplay}</p>
+          {/* Join date */}
+          <div>
+            <span className="text-gray-500 text-sm">Joined {joinDate}</span>
+          </div>
+        </div>
       </div>
 
       <Separator />
 
-      {/* Posts */}
-      <div>
-        <h2 className="font-bold text-xl my-2">Posts</h2>
-        <div className="flex flex-col-reverse gap-3 px-2">
-          {user.posts.map((post) => (
-            <Post key={post.id} data={post} />
-          ))}
-        </div>
+      <div className="flex flex-col h-fit gap-6 p-4 pb-20 no-scrollbar overflow-hidden bg-muted">
+        {user.posts.map((post) => (
+          <Post key={post.id} data={post} />
+        ))}
       </div>
     </div>
   );
