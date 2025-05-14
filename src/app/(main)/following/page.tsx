@@ -1,8 +1,8 @@
 import { getCurrentUser } from "@/modules/auth/lib/user";
 import { prisma } from "@/lib/server/prisma";
-import Post from "@/modules/posts/components/post/Post";
+import Post from "@/modules/post/components/post/Post";
 import React, { Suspense } from "react";
-import PostSkeleton from "@/modules/posts/components/PostSkeleton";
+import PostSkeleton from "@/modules/post/components/PostSkeleton";
 import { getFollowingUsers } from "@/modules/user/actions/following";
 
 export default async function Following() {

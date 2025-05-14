@@ -51,6 +51,7 @@ model Post {
   author_id  String
   author     User      @relation(fields: [author_id], references: [id], onDelete: Cascade)
   content    String
+  image_urls String[]
   likes      Like[]
   comments   Comment[]
   saves      Save[]

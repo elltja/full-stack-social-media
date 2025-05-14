@@ -6,7 +6,9 @@ export default async function middleware(request: NextRequest) {
     isProtectedRoute(request.nextUrl.pathname) &&
     !(await isAuthenticated())
   ) {
-    return NextResponse.redirect("/accounts/signin");
+    return NextResponse.redirect(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/accounts/signin`
+    );
   }
   return NextResponse.next();
 }

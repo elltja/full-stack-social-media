@@ -2,7 +2,7 @@ import ProfilePicture from "@/modules/user/components/ProfilePicture";
 import { Separator } from "@/components/ui/separator";
 import { prisma } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
-import Post from "@/modules/posts/components/post/Post";
+import Post from "@/modules/post/components/post/Post";
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 type ProfileParams = {

@@ -6,8 +6,14 @@ import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
 import "server-only";
 import { ProfileFormState } from "../lib/types";
-import { deleteUploadedFile, uploadFile } from "../lib/uploadFile";
+import {
+  deleteUploadedFile,
+  getCloudinaryUrl,
+  uploadFile,
+} from "@/lib/server/cloudinary";
 import { validateProfileForm } from "../lib/validators";
+
+const PROFILE_PICTURE_FOLDER_NAME = "profile-pictures";
 
 export async function createProfile(
   _: ProfileFormState,
@@ -30,7 +36,10 @@ export async function createProfile(
     const currentUser = await getCurrentUser();
 
     if (currentUser.avatar_url) {
-      await deleteUploadedFile(currentUser.avatar_url);
+      await deleteUploadedFile(
+        currentUser.avatar_url,
+        PROFILE_PICTURE_FOLDER_NAME
+      );
     }
 
     const file = formData.get("avatar") as unknown;
@@ -68,7 +77,7 @@ async function updateUserProfile(
 async function uploadAvatarImage(file: unknown) {
   if (file instanceof File && file.size !== 0) {
     try {
-      const publicId = await uploadFile(file);
+      const publicId = await uploadFile(file, PROFILE_PICTURE_FOLDER_NAME);
       return getCloudinaryUrl(publicId);
     } catch (error) {
       console.error(error);
@@ -76,8 +85,4 @@ async function uploadAvatarImage(file: unknown) {
     }
   }
   return null;
-}
-
-function getCloudinaryUrl(publicId: string): string {
-  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${publicId}`;
 }

@@ -2,37 +2,11 @@
 
 import "server-only";
 import { prisma } from "@/lib/server/prisma";
-import { PostFormState } from "../lib/types";
 import { getCurrentUser } from "@/modules/auth/lib/user";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-
-export async function createPost(
-  state: PostFormState,
-  formData: unknown
-): Promise<PostFormState> {
-  if (!(formData instanceof FormData)) {
-    return { error: "Invalid request", text: "" };
-  }
-  const text = formData.get("text") as string;
-
-  if (typeof text !== "string") {
-    return { error: "Invalid request", text: "" };
-  }
-
-  if (text === "") return { text: "" };
-
-  const currentUser = await getCurrentUser();
-
-  await prisma.post.create({
-    data: {
-      content: text,
-      author_id: currentUser.id,
-    },
-  });
-  revalidatePath("/");
-  return { text: "" };
-}
+import { deleteUploadedFile } from "@/lib/server/cloudinary";
+import { POST_IMAGES_FOLDER_NAME } from "../lib/constants";
 
 export async function deletePost(postId: string) {
   const post = await prisma.post.findUnique({
@@ -50,9 +24,16 @@ export async function deletePost(postId: string) {
     console.error("A user tried deleting a post which isn't theirs");
     return;
   }
+  await deleteImages(post.image_urls);
   await prisma.post.delete({
     where: { id: postId },
   });
   revalidatePath("/");
   redirect("/");
+}
+
+async function deleteImages(urls: string[]) {
+  urls.forEach(async (url) => {
+    await deleteUploadedFile(url, POST_IMAGES_FOLDER_NAME);
+  });
 }
