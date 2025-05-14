@@ -11,6 +11,7 @@ export default function ImageUploader({
         id="file-upload"
         className="hidden"
         name="images"
+        multiple
         {...props}
       />
       <label htmlFor="file-upload">

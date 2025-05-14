@@ -4,16 +4,17 @@ import { prisma } from "@/lib/server/prisma";
 import { notFound } from "next/navigation";
 import Post from "@/modules/post/components/post/Post";
 import React from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { formatDistanceToNowStrict } from "date-fns";
+
 type ProfileParams = {
   username: string;
 };
 
-function parseUsername(params: ProfileParams) {
-  if (!params.username.includes("%40")) {
+function parseUsername(username: string) {
+  if (!username.includes("%40")) {
     return null;
   }
-  return params.username.replaceAll("%40", "");
+  return username.replaceAll("%40", "");
 }
 
 export default async function Profile({
@@ -21,13 +22,14 @@ export default async function Profile({
 }: {
   params: Promise<ProfileParams>;
 }) {
-  const username = parseUsername(await params);
-
+  const username = parseUsername((await params).username);
   if (!username) notFound();
 
   const user = await prisma.user.findUnique({
     where: { account_name: username },
     include: {
+      followers: true,
+      following: true,
       posts: {
         include: {
           author: true,
@@ -38,40 +40,70 @@ export default async function Profile({
     },
   });
 
-  if (!user) notFound();
+  if (!user || !user.profile_completed) notFound();
+
+  const dateDisplay = formatDistanceToNowStrict(user.created_at, {
+    addSuffix: true,
+  });
 
   return (
-    <div className="w-full h-fit m-10 bg-background rounded-md shadow flex flex-col p-5 gap-10 md:gap-4">
-      <div className="flex gap-5 items-center h-fit">
+    <div className="w-full m-10 bg-background rounded-md shadow p-5 flex flex-col gap-10">
+      {/* Header */}
+      <div className="flex gap-5 items-center">
         <ProfilePicture
           src={user.avatar_url || ""}
           name={user.name || ""}
           username={user.account_name}
-          style={{ width: 100, height: 100, fontSize: 50 }}
+          className="w-25 h-25"
         />
         <div className="flex flex-col">
-          <h1 className="font-bold text-xl">{user.name}</h1>
-          <p className="text-gray-700">{user.email}</p>
+          <h1 className="font-bold text-xl">
+            {user.name || user.account_name}
+          </h1>
+          <p className="text-gray-700">@{user.account_name}</p>
         </div>
       </div>
+
+      <div className="flex gap-5">
+        <div>
+          <span className="font-semibold">{user.posts.length}</span>
+          {"  "}
+          <span className="text-gray-500 text-sm">Posts</span>
+        </div>
+        <div>
+          <span className="font-semibold">{user.followers.length}</span>
+          {"  "}
+          <span className="text-gray-500 text-sm">Followers</span>
+        </div>
+        <div>
+          <span className="font-semibold">{user.following.length}</span>
+          {"  "}
+          <span className="text-gray-500 text-sm">Following</span>
+        </div>
+      </div>
+
+      {/* Bio */}
       <div>
         <h3 className="font-semibold">Bio</h3>
-        <p className="text-gray-500">{user.bio}</p>
+        <p className="text-gray-500">{user.bio || "No bio provided."}</p>
       </div>
+
+      {/* Join date */}
       <div>
         <h3 className="font-semibold">Joined</h3>
-        <p className="text-gray-500">{user.created_at.toLocaleDateString()}</p>
+        <p className="text-gray-500">{dateDisplay}</p>
       </div>
+
       <Separator />
-      <div className="">
+
+      {/* Posts */}
+      <div>
         <h2 className="font-bold text-xl my-2">Posts</h2>
-        <ScrollArea className="h-[550px]">
-          <div className="flex flex-col-reverse gap-3 px-2">
-            {user.posts.map((post) => (
-              <Post key={post.id} data={post} />
-            ))}
-          </div>
-        </ScrollArea>
+        <div className="flex flex-col-reverse gap-3 px-2">
+          {user.posts.map((post) => (
+            <Post key={post.id} data={post} />
+          ))}
+        </div>
       </div>
     </div>
   );
