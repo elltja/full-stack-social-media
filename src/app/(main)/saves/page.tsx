@@ -41,6 +41,7 @@ async function SuspendedPosts() {
         },
       },
     },
+    orderBy: { created_at: "desc" },
   });
   return (
     <>

@@ -13,7 +13,11 @@ export default function Post({ data }: { data: PostWithLikesSavesAndAuthor }) {
         createdAt={data.created_at}
         postId={data.id}
       />
-      <PostContent textContent={data.content} imageUrls={data.image_urls} />
+      <PostContent
+        textContent={data.content}
+        imageUrls={data.image_urls}
+        postId={data.id}
+      />
       <PostActions
         initialLikes={data.likes}
         initialSaves={data.saves}

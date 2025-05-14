@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/server/prisma";
+import { revalidatePath } from "next/cache";
 import "server-only";
 
 export async function savePost(postId: string, userId: string) {
@@ -11,6 +12,7 @@ export async function savePost(postId: string, userId: string) {
         user_id: userId,
       },
     });
+    revalidatePath("/saves");
   } catch (error) {
     console.error("Error saving post:", error);
     throw new Error("Failed to save the post. Please try again later.");
@@ -27,6 +29,7 @@ export async function unSavePost(postId: string, userId: string) {
         },
       },
     });
+    revalidatePath("/saves");
   } catch (error) {
     console.error("Error unsaving post: ", error);
     throw new Error("Failed to unsave the post. Please try again later");
