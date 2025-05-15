@@ -6,7 +6,15 @@ import { PostFormState } from "@/modules/post/lib/types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  await createPost(await request.formData());
+  try {
+    await createPost(await request.formData());
+  } catch (error) {
+    console.error("Error publishing post " + error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 
   return NextResponse.json(
     { message: "Successfully published post" },
